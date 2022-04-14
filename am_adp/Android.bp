@@ -2,13 +2,13 @@ cc_library_static {
     //vendor: true,
     vendor_available: true,
     name: "libam_adp_static",
-    compile_multilib: "32",
+    compile_multilib: "both",
     arch: {
         arm: {
             instruction_set: "arm",
         },
         arm64: {
-            enabled: false,
+            enabled: true,
         },
         x86: {
             enabled: false,
@@ -186,13 +186,13 @@ cc_library_static {
 
 cc_library_static {
     name: "libam_adp_static.system",
-    compile_multilib: "32",
+    compile_multilib: "both",
     arch: {
         arm: {
             instruction_set: "arm",
         },
         arm64: {
-            enabled: false,
+            enabled: true,
         },
         x86: {
             enabled: false,
@@ -371,14 +371,14 @@ cc_library_static {
 cc_library_shared {
     name: "libam_adp",
     vendor: true,
-    compile_multilib: "32",
+    compile_multilib: "both",
 
     arch: {
         arm: {
             instruction_set: "arm",
         },
         arm64: {
-            enabled: false,
+            enabled: true,
         },
         x86: {
             enabled: false,
