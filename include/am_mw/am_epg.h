@@ -332,6 +332,9 @@ extern AM_ErrorCode_t AM_EPG_SetTablesCallback(AM_EPG_Handle_t handle, int table
 
 extern AM_ErrorCode_t AM_EPG_DisableDefProc(AM_EPG_Handle_t handle, AM_Bool_t disable);
 
+extern AM_ErrorCode_t AM_SI_ExtractDVBIsdbsubtitleFromES(dvbpsi_pmt_es_t *es, AM_SI_IsdbsubtitleInfo_t *sub_info);
+
+extern AM_ErrorCode_t AM_SI_ExtractScte27SubtitleFromES(dvbpsi_pmt_es_t *es, AM_SI_IsdbsubtitleInfo_t *sub_info);
 
 #ifdef __cplusplus
 }
