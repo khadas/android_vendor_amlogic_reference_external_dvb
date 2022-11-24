@@ -30,11 +30,11 @@ cc_library_static {
 
     // TODO: include library
     include_dirs: [
-         "vendor/amlogic/common/external/dvb/include/am_ver",
-         "vendor/amlogic/common/external/dvb/include/am_adp",
          "vendor/amlogic/common/frameworks/services/systemcontrol/PQ/include",
          "vendor/amlogic/common/frameworks/services/systemcontrol",
     ],
+
+    header_libs: ["libam_dvb_headers"],
 
     shared_libs: [
        "libcutils",
@@ -68,11 +68,12 @@ cc_library_shared {
     },
     ldflags: ["-shared"],
     include_dirs: [
-         "vendor/amlogic/common/external/dvb/include/am_ver",
-         "vendor/amlogic/common/external/dvb/include/am_adp",
          "vendor/amlogic/common/frameworks/services/systemcontrol/PQ/include",
          "vendor/amlogic/common/frameworks/services/systemcontrol",
     ],
+
+    header_libs: ["libam_dvb_headers"],
+
     whole_static_libs: [
        "libam_ver_static",
     ],

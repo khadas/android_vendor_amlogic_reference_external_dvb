@@ -5,4 +5,19 @@ subdirs = [
   "am_sysfs",
 ]
 
+cc_library_headers {
+  name: "libam_dvb_headers",
+  export_include_dirs: [
+    "include/am_adp",
+    "include/am_mw",
+    "include/am_ver",
+    "include/am_sysfs",
+    "include/am_adp/libdvbsi",
+    "include/am_adp/libdvbsi/descriptors",
+    "include/am_adp/libdvbsi/tables",
+    "android/ndk/include",
+    "android/ndk/include/linux",
+  ],
+  vendor_available: true,
+}
 

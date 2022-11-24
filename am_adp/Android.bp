@@ -156,25 +156,22 @@ cc_library_static {
     ],
     clang_cflags: ["-Wno-error=tautological-pointer-compare"],
     ldflags: ["-shared"],
-    // TODO: include library
+
     include_dirs: [
         "hardware/amlogic/LibAudio/amadec/include",
-        "hardware/amlogic/media/amcodec/include",
-        "vendor/amlogic/common/external/dvb/include/am_adp",
-        "vendor/amlogic/common/external/dvb/include/am_ver",
-        "vendor/amlogic/common/external/dvb/am_adp/am_av",
-	"vendor/amlogic/common/external/dvb/include/am_adp/libdvbsi",
-        "vendor/amlogic/common/external/dvb/include/am_adp/libdvbsi/descriptors",
-        "vendor/amlogic/common/external/dvb/include/am_adp/libdvbsi/tables",
-        "vendor/amlogic/common/external/dvb/am_mw/am_closecaption/am_vbi/",
-        "vendor/amlogic/common/external/dvb/include/am_mw",
-         "vendor/amlogic/common/external/dvb/android/ndk/include",
-        "vendor/amlogic/common/external/dvb/am_adp/am_open_lib/am_ci/",
-        "vendor/amlogic/common/external/libzvbi_src/src",
-	"vendor/amlogic/common/mediahal_sdk/include",
-	"vendor/amlogic/common/prebuilt/icu/include",
+        "vendor/amlogic/common/mediahal_sdk/include",
+        "vendor/amlogic/common/prebuilt/icu/include",
         "external/sqlite/dist/",
     ],
+
+    local_include_dirs: [
+        "am_av",
+        "am_open_lib/am_ci/",
+    ],
+
+    header_libs: ["libam_dvb_headers"],
+
+    export_include_dirs: ["am_open_lib/am_ci"],
 
     shared_libs: [
        "libcutils",
@@ -340,25 +337,22 @@ cc_library_static {
     ],
     clang_cflags: ["-Wno-error=tautological-pointer-compare"],
     ldflags: ["-shared"],
-    // TODO: include library
+
     include_dirs: [
         "hardware/amlogic/LibAudio/amadec/include",
-        "hardware/amlogic/media/amcodec/include",
-        "vendor/amlogic/common/external/dvb/include/am_adp",
-        "vendor/amlogic/common/external/dvb/include/am_ver",
-        "vendor/amlogic/common/external/dvb/am_adp/am_av",
-	"vendor/amlogic/common/external/dvb/include/am_adp/libdvbsi",
-        "vendor/amlogic/common/external/dvb/include/am_adp/libdvbsi/descriptors",
-        "vendor/amlogic/common/external/dvb/include/am_adp/libdvbsi/tables",
-        "vendor/amlogic/common/external/dvb/am_mw/am_closecaption/am_vbi/",
-        "vendor/amlogic/common/external/dvb/include/am_mw",
-         "vendor/amlogic/common/external/dvb/android/ndk/include",
-        "vendor/amlogic/common/external/dvb/am_adp/am_open_lib/am_ci/",
-        "vendor/amlogic/common/external/libzvbi_src/src",
-	"vendor/amlogic/common/mediahal_sdk/include",
-	"vendor/amlogic/common/prebuilt/icu/include",
+        "vendor/amlogic/common/mediahal_sdk/include",
+        "vendor/amlogic/common/prebuilt/icu/include",
         "external/sqlite/dist/",
     ],
+
+    local_include_dirs: [
+        "am_av",
+        "am_open_lib/am_ci/",
+    ],
+
+    header_libs: ["libam_dvb_headers"],
+
+    export_include_dirs: ["am_open_lib/am_ci"],
 
     shared_libs: [
        "libcutils",
