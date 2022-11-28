@@ -109,6 +109,7 @@ cc_library_static {
 	   "am_open_lib/libdvbsi/descriptors/dr_5d.c",
 	   "am_open_lib/libdvbsi/descriptors/dr_6a.c",
 	   "am_open_lib/libdvbsi/descriptors/dr_7a.c",
+	   "am_open_lib/libdvbsi/descriptors/dr_7c.c",
 	   "am_open_lib/libdvbsi/descriptors/dr_7f.c",
 	   "am_open_lib/libdvbsi/descriptors/dr_a1.c",
 	   "am_open_lib/libdvbsi/descriptors/dr_cc.c",
