@@ -10,8 +10,8 @@ cc_library_static {
 
     cflags: [
         "-std=gnu99",
+        "-Wno-error=tautological-pointer-compare"
     ],
-    clang_cflags: ["-Wno-error=tautological-pointer-compare"],
 
     arch: {
         arm: {

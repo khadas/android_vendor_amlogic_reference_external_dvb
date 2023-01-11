@@ -153,8 +153,8 @@ cc_library_static {
         "-DCONFIG_AMLOGIC_DVB_COMPAT",
         "-DCHIP_8626X",
         "-DUSE_VENDOR_ICU",
+        "-Wno-error=tautological-pointer-compare",
     ],
-    clang_cflags: ["-Wno-error=tautological-pointer-compare"],
     ldflags: ["-shared"],
 
     include_dirs: [
@@ -334,8 +334,8 @@ cc_library_static {
         "-DCONFIG_AMLOGIC_DVB_COMPAT",
         "-DCHIP_8626X",
         "-DUSE_VENDOR_ICU",
+        "-Wno-error=tautological-pointer-compare",
     ],
-    clang_cflags: ["-Wno-error=tautological-pointer-compare"],
     ldflags: ["-shared"],
 
     include_dirs: [
@@ -398,8 +398,8 @@ cc_library_shared {
         "-DCONFIG_AMLOGIC_DVB_COMPAT",
         "-DCHIP_8626X",
         "-DUSE_VENDOR_ICU",
+        "-Wno-error=tautological-pointer-compare"
     ],
-    clang_cflags: ["-Wno-error=tautological-pointer-compare"],
     ldflags: ["-shared"],
     whole_static_libs: [
        "libam_adp_static",

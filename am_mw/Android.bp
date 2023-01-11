@@ -59,10 +59,10 @@ cc_library_static {
         "-std=gnu99",
         "-DLINUX_DVB_FEND",
         "-DLOG_LEVEL=1",
-        "-DUSE_VENDOR_ICU"
+        "-DUSE_VENDOR_ICU",
+        "-Wno-error=tautological-pointer-compare"
     ],
     ldflags: ["-shared"],
-    clang_cflags: ["-Wno-error=tautological-pointer-compare"],
 
     // TODO: include library
     include_dirs: [

@@ -175,7 +175,7 @@ static AM_ErrorCode_t aml_set_key (
 		aes_param.type = alg_type;
 		aes_param.mode = chan->mode;
 		memcpy(aes_param.cw, key, 16);
-		AM_DEBUG("%s mode:%d\n",__FUNCTION__,aes_param.mode);
+		//AM_DEBUG("%s mode:%d\n",__FUNCTION__,aes_param.mode);
 		if (ioctl(fd, CA_SET_DESCR_EX, &aes_param) == -1)
 			goto ERR;
 		else
