@@ -4512,7 +4512,7 @@ static AM_ErrorCode_t xds_store_useproc_event(AM_xdsUserProcEvent_t event)
      char event_name[256],event_descr[256],event_ext_descr[256],rrt_rating[256];
      sqlite3 *sqldb = xds_get_sqlite_handle();     
      int ts_dbid=-1,srv_dbid=-1,source_id=-1,src=-1;
-     static clear_expired_evt_table = 0;
+     static int clear_expired_evt_table = 0;
 
      ret = xds_get_svr_si_table_items(sqldb,&ts_dbid,&srv_dbid,&source_id,&src);
      if(AM_SUCCESS != ret)
