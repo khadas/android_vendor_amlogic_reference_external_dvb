@@ -1,3 +1,15 @@
+package {
+     default_applicable_licenses: ["vendor_amlogic_dvb_mw_license"],
+}
+
+license {
+    name: "vendor_amlogic_dvb_mw_license",
+    visibility: [":__subpackages__"],
+    license_kinds: [
+        "SPDX-license-identifier-BSD-Source-Code",
+    ],
+}
+
 // TODO:
 cc_library_static {
     vendor: true,
