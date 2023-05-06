@@ -79,7 +79,7 @@ typedef struct
     AM_SUB_Region_t*      region;    /**< 区域结构指针*/
 }AM_SUB_Screen_t;
 
-/**\brief 显示screan
+/**\brief 显示screen
  * screen为显示信息
  */
 typedef void (*AM_SUB_ShowCb_t)(AM_SUB_Screen_t* screen);

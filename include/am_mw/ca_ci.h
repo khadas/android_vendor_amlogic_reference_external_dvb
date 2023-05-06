@@ -46,7 +46,7 @@ enum ca_ci_msg_type
 	ca_ci_msg_type_cainfo,								/**< send ca info message from ca to app*/
 	ca_ci_msg_type_mmi_close,							/**< send mmi close message from ca to app*/
 	ca_ci_msg_type_mmi_display_control,		/**< send mmi displayer message from ca to app*/
-	ca_ci_msg_type_mmi_enq,								/**< send mmi enquie message from ca to app*/
+	ca_ci_msg_type_mmi_enq,								/**< send mmi enquire message from ca to app*/
 	ca_ci_msg_type_mmi_menu,							/**< send mmi meun message from ca to app*/
 	ca_ci_msg_type_mmi_list,							/**< send mmi list message from ca to app*/
 
@@ -83,10 +83,10 @@ struct ca_ci_mmi_display_control_s {
 	uint8_t cmd_id; 		/**< cmd_id	see MMI_DISPLAY_CONTROL_CMD_ID* in en50221_app_mmi.h */
 	uint8_t mmi_mode;		/**< see MMI_MODE_* in en50221_app_mmi.h*/
 };
-/**\brief mmi enquie info of ci,used to notify app to show mmi eng menu*/
+/**\brief mmi enquire info of ci,used to notify app to show mmi eng menu*/
 struct ca_ci_mmi_enq_s {
 	uint8_t blind_answer;						/**< set to 1 menus that user input has not to be displayed*/
-	uint8_t expected_answer_length;	/**< expected length,if set to FF means unkown*/
+	uint8_t expected_answer_length;	/**< expected length,if set to FF means unknown*/
 	uint32_t text_size;							/**< input text string length*/
 	uint8_t text[0];								/**< input text string*/
 };
@@ -108,7 +108,7 @@ struct ca_ci_mmi_menu_list_s {
 	uint8_t items_raw[0];
 };
 */
-/**\brief mmi answer enquie info of ci,uesd to answer or cancel ca_ci_msg_type_mmi_enq type message*/
+/**\brief mmi answer enquire info of ci,used to answer or cancel ca_ci_msg_type_mmi_enq type message*/
 struct ca_ci_answer_enq_s {
 	int answer_id;		/**< set 1 means answer,set 0 means cancel*/
 	int size;					/**< answer text string length*/
@@ -132,7 +132,7 @@ struct ca_ci_set_pmt_s {
 };
 
 /**\brief message type of ci
- * msg ： this member will store message connent
+ * msg ： this member will store message connect
  * for example :
  *			ca_ci_appinfo_s
  *			ca_ci_cainfo_s
@@ -147,7 +147,7 @@ struct ca_ci_set_pmt_s {
 struct ca_ci_msg_s
 {
 	int type;								/**< message type,see ca_ci_msg_type*/
-	unsigned char msg[0];		/**< message connent obj*/
+	unsigned char msg[0];		/**< message connect obj*/
 };
 
 extern AM_CA_t ca_ci;

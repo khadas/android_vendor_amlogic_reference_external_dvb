@@ -46,7 +46,7 @@ enum AM_CI_ErrorCode
 	AM_CI_ERROR_MAX_DEV,											/**< already open max device,need close other device*/
 	AM_CI_ERROR_BAD_CAM,											/**< Cam card is bad*/
 	AM_CI_ERROR_UNAVAILABLE,									/**< ci unavailable error*/
-	AM_CI_ERROR_UNKOWN,												/**< Unkown error*/
+	AM_CI_ERROR_UNKOWN,												/**< Unknown error*/
 };
 /**\brief callback id of the ci module*/
 enum AM_CI_CBID
@@ -87,7 +87,7 @@ enum AM_CI_CA_PMT_CMD_ID
 	AM_CI_CA_PMT_CMD_ID_OK_DESCRAMBLING =  0x01,	/**< application can start descrambling*/
 	AM_CI_CA_PMT_CMD_ID_OK_MMI =           0x02,	/**< application can send mmi dialogue but shall not satrt descrambling*/
 	AM_CI_CA_PMT_CMD_ID_QUERY =            0x03,	/**< host expect to receive ca pmt reply,the application is not allowen to start des and mmi dialogue*/
-	AM_CI_CA_PMT_CMD_ID_NOT_SELECTED =     0x04,	/**< host no longer requires that ca applition to descramble the service*/
+	AM_CI_CA_PMT_CMD_ID_NOT_SELECTED =     0x04,	/**< host no longer requires that ca application to descramble the service*/
 };
 /**\brief CI handle type*/
 typedef void* AM_CI_Handle_t;
@@ -152,7 +152,7 @@ typedef int (*mmi_display_control_callback)(void *arg, uint8_t slot_id, uint16_t
  * \param[in] slot_id ci slot id
  * \param[in] session_number	ci session number
  * \param[in] blind_answer	set to 1 menus that user input has not to be displayed
- * \param[in] expected_answer_length expected length,if set to FF if unkown
+ * \param[in] expected_answer_length expected length,if set to FF if unknown
  * \param[in] text	input text string
  * \param[in] text_size input text length
  * \retval AM_SUCCESS On success
@@ -274,14 +274,14 @@ extern AM_ErrorCode_t AM_CI_App_mmi_menu_answ(AM_CI_Handle_t handle, int select)
  */
 extern AM_ErrorCode_t AM_CI_App_mmi_close(AM_CI_Handle_t handle, int cmd_id, int delay);
 
-/*infomations enquired will be repled in the callback*/
+/*informations enquired will be repled in the callback*/
 
-/**\brief ci enquie ca info
+/**\brief ci enquire ca info
  * \param [in] handle ci opened handle
  * \return Error code
  */
 extern AM_ErrorCode_t AM_CI_App_ca_info_enq(AM_CI_Handle_t handle);
-/**\brief ci enquie ai
+/**\brief ci enquire ai
  * \param [in] handle ci opened handle
  * \retval AM_SUCCESS On success
  * \return Error code
@@ -290,7 +290,7 @@ extern AM_ErrorCode_t AM_CI_App_ai_enquiry(AM_CI_Handle_t handle);
 
 /*user need to free the generated capmt with free() in the end */
 /**\brief ci generate ca pmt
- * \param [in] pmt CA modue recivered pmt
+ * \param [in] pmt CA modue recovered pmt
  * \param [in] pmt_size pmt length
  * \param [out] capmt generated ca pmt
  * \param [out] capmt_size capmt length

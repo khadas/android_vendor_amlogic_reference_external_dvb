@@ -45,7 +45,7 @@ extern "C" {
  * \brief  one subtitle structure.
  *
  * This structure is used since parental_rating_descriptor will contain several
- * coutry/rating pairs.
+ * country/rating pairs.
  */
 /*!
  * \typedef struct dvbpsi_parental_rating_s dvbpsi_parental_rating_t

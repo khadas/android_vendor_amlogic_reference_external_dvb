@@ -64,7 +64,7 @@
 **              Improved performance (especially for free()ing!).
 **              Support for 'read-only' buffers (checksums)
 **              ^^ NOTE: I never did this... maybe I should?
-**              FBI (free'd block info) tagged before freed blocks
+**              FBI (free block info) tagged before freed blocks
 **              Exporting of the mwCounter variable
 **              mwBreakOut() localizes debugger support
 **              Allocation statistics (global, per-module, per-line)
@@ -137,7 +137,7 @@
 **         In these cases, the only thing to do is to use MEMWATCH_NOCPP.
 **
 ** You can capture output from MEMWATCH using mwSetOutFunc().
-** Just give it the adress of a "void myOutFunc(int c)" function,
+** Just give it the address of a "void myOutFunc(int c)" function,
 ** and all characters to be output will be redirected there.
 **
 ** A failing ASSERT() or VERIFY() will normally always abort your
@@ -164,7 +164,7 @@
 ** calloc(), which will fill with zero's. All freed buffers are
 ** zapped with 0xFD. If this is what you look at, you're using
 ** data that has been freed. If this is the case, be aware that
-** MEMWATCH places a 'free'd block info' structure immediately
+** MEMWATCH places a 'free block info' structure immediately
 ** before the freed data. This block contains info about where
 ** the block was freed. The information is in readable text,
 ** in the format "FBI<counter>filename(line)", for example:
@@ -173,7 +173,7 @@
 **
 ** To aid in tracking down wild pointer writes, MEMWATCH can perform
 ** no-mans-land allocations. No-mans-land will contain the byte 0xFC.
-** MEMWATCH will, when this is enabled, convert recently free'd memory
+** MEMWATCH will, when this is enabled, convert recently free memory
 ** into NML allocations.
 **
 ** MEMWATCH protects it's own data buffers with checksums. If you
@@ -361,7 +361,7 @@ extern "C" {
 #define MW_TEST_NML     0x0004  /* test all-NML areas for modifications */
 
 #define MW_NML_NONE     0       /* no NML */
-#define MW_NML_FREE     1       /* turn FREE'd memory into NML */
+#define MW_NML_FREE     1       /* turn FREE memory into NML */
 #define MW_NML_ALL      2       /* all unused memory is NML */
 #define MW_NML_DEFAULT  0       /* the default NML setting */
 
@@ -392,7 +392,7 @@ extern const unsigned long mwCounter;
 
 /*
 ** System functions
-**  Normally, it is not nessecary to call any of these. MEMWATCH will
+**  Normally, it is not necessary to call any of these. MEMWATCH will
 **  automatically initialize itself on the first MEMWATCH function call,
 **  and set up a call to mwAbort() using atexit(). Some C++ implementations
 **  run the atexit() chain before the program has terminated, so you
@@ -401,7 +401,7 @@ extern const unsigned long mwCounter;
 **  - mwInit() can be called to disable the atexit() usage. If mwInit()
 **      is called directly, you must call mwTerm() to end MemWatch, or
 **      mwAbort().
-**  - mwTerm() is usually not nessecary to call; but if called, it will
+**  - mwTerm() is usually not necessary to call; but if called, it will
 **      call mwAbort() if it finds that it is cancelling the 'topmost'
 **      mwInit() call.
 **  - mwAbort() cleans up after MEMWATCH, reports unfreed buffers, etc.
@@ -429,13 +429,13 @@ void  mwAbort( void );
 **      MW_NML_xxx for more information. The default is MW_NML_DEFAULT.
 **  - mwStatistics() sets the behaviour of the statistics collector. See
 **      the MW_STAT_xxx defines for more information. Default MW_STAT_DEFAULT.
-**  - mwFreeBufferInfo() enables or disables the tagging of free'd buffers
+**  - mwFreeBufferInfo() enables or disables the tagging of free buffers
 **      with freeing information. This information is written in text form,
 **      using sprintf(), so it's pretty slow. Disabled by default.
 **  - mwAutoCheck() performs a CHECK() operation whenever a MemWatch function
 **      is used. Slows down performance, of course.
 **  - mwCalcCheck() calculates checksums for all data buffers. Slow!
-**  - mwDumpCheck() logs buffers where stored & calc'd checksums differ. Slow!!
+**  - mwDumpCheck() logs buffers where stored & calculated checksums differ. Slow!!
 **  - mwMark() sets a generic marker. Returns the pointer given.
 **  - mwUnmark() removes a generic marker. If, at the end of execution, some
 **      markers are still in existence, these will be reported as leakage.
@@ -489,12 +489,12 @@ int   mwVerify( int, const char*, const char*, int );
 **  - mwTrace() works like printf(), but dumps output either to the
 **      function specified with mwSetOutFunc(), or the log file.
 **  - mwPuts() works like puts(), dumps output like mwTrace().
-**  - mwSetOutFunc() allows you to give the adress of a function
-**      where all user output will go. (exeption: see mwSetAriFunc)
+**  - mwSetOutFunc() allows you to give the address of a function
+**      where all user output will go. (exception: see mwSetAriFunc)
 **      Specifying NULL will direct output to the log file.
-**  - mwSetAriFunc() gives MEMWATCH the adress of a function to call
+**  - mwSetAriFunc() gives MEMWATCH the address of a function to call
 **      when an 'Abort, Retry, Ignore' question is called for. The
-**      actual error message is NOT printed when you've set this adress,
+**      actual error message is NOT printed when you've set this address,
 **      but instead it is passed as an argument. If you call with NULL
 **      for an argument, the ARI handler is disabled again. When the
 **      handler is disabled, MEMWATCH will automatically take the

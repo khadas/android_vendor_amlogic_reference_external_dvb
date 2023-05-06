@@ -101,7 +101,7 @@ bool dvbpsi_atsc_AttachSTT(dvbpsi_t *p_dvbpsi, uint8_t i_table_id, uint16_t i_ex
  *                    (Required to match prototype for demux)
  * \return nothing.
  */
-void dvbpsi_atsc_DetachSTT(dvbpsi_t *p_dvbpsi, uint8_t i_table_id, uint16_t i_externsion);
+void dvbpsi_atsc_DetachSTT(dvbpsi_t *p_dvbpsi, uint8_t i_table_id, uint16_t i_extension);
 
 /*****************************************************************************
  * dvbpsi_atsc_InitSTT/dvbpsi_atsc_NewSTT

@@ -49,7 +49,7 @@ enum csi_command
 	CSI_CMD_SDF = 0x56,
 	/* Character composition dot designation */
 	CSI_CMD_SSM = 0x57,
-	/* Set HOrizontal spacing */
+	/* Set Horizontal spacing */
 	CSI_CMD_SHS = 0x58,
 	/* Set Vertical Spacing */
 	CSI_CMD_SVS = 0x59,

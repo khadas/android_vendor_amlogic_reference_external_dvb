@@ -56,7 +56,7 @@ extern AM_ErrorCode_t AM_VLFEND_Close(int dev_no);
 extern AM_ErrorCode_t AM_VLFEND_CloseEx(int dev_no, AM_Bool_t reset);
 
 
-/**\brief set frontend deivce mode
+/**\brief set frontend device mode
  * \param dev_no frontend device number
  * \param mode frontend demod mode
  * \return

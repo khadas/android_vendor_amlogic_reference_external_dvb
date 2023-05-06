@@ -677,7 +677,7 @@ void si_decode_descriptor_ex(dvbpsi_descriptor_t *descr, SI_Descriptor_Flag_t fl
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_AAC,			dvbpsi_DecodeAACDr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_PSIPENHANCED_AC3, 	dvbpsi_DecodePSIPENAC3Dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_PSIP_AUDIOSTREAM_AC3, 	dvbpsi_decode_atsc_ac3_audio_dr)
-		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_EXTENSION, 	dvbpsi_DecodeEXTENTIONDr)
+		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_EXTENSION, 	dvbpsi_DecodeEXTENSIONDr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_CAPTION_SERVICE,  dvbpsi_decode_atsc_caption_service_dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_SERVICE_LOCATION, dvbpsi_decode_atsc_service_location_dr)
 		default:
@@ -2102,7 +2102,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
 		AM_SI_LIST_BEGIN(es->p_first_descriptor, descr)
 			if (descr->i_tag == AM_SI_DESCR_EXTENSION && descr->p_decoded != NULL)
 			{
-				dvbpsi_EXTENTION_dr_t *pisod = (dvbpsi_EXTENTION_dr_t*)descr->p_decoded;
+				dvbpsi_EXTENSION_dr_t *pisod = (dvbpsi_EXTENSION_dr_t*)descr->p_decoded;
 				if (pisod->i_extern_des_tag == AM_SI_EXTEN_DESCR_AC4)
 				{
 					AM_DEBUG(1, "!!Found AC4 Descriptor!!!");
@@ -2111,11 +2111,11 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
 				else if (pisod->i_extern_des_tag == AM_SI_EXTEN_DESCR_AUDIO_PRESELECTION)
 				{
 					AM_DEBUG(1, "!!Found AC4 Audio Preselection Descriptor!!!");
-					dvbpsi_EXTENTION_audio_preselection_t* ap = &pisod->exten_t.audio_preselection;
+					dvbpsi_EXTENSION_audio_preselection_t* ap = &pisod->exten_t.audio_preselection;
 					afmt_tmp = 29;
 					for (int i=0;i<ap->num_preselections;i++)
 					{
-						dvbpsi_EXTENTION_preselection_t* ps = &ap->preselections[i];
+						dvbpsi_EXTENSION_preselection_t* ps = &ap->preselections[i];
 						int id = ps->preselection_id;
 						int msg_id = (ps->text_label_present ? ps->message_id : -1);
 						si_add_audio(aud_info, es->i_pid, afmt_tmp, ps->iso_639_language_code,
@@ -2144,7 +2144,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
 		AM_SI_LIST_BEGIN(es->p_first_descriptor, descr)
 			if (descr->i_tag == AM_SI_DESCR_EXTENSION && descr->p_decoded != NULL)
 			{
-				dvbpsi_EXTENTION_dr_t *pisod = (dvbpsi_EXTENTION_dr_t*)descr->p_decoded;
+				dvbpsi_EXTENSION_dr_t *pisod = (dvbpsi_EXTENSION_dr_t*)descr->p_decoded;
 				if (pisod->i_extern_des_tag == AM_SI_EXTEN_DESCR_SUP_AUDIO)
 				{
 					if (pisod->exten_t.sup_audio.lang_code == 1) {

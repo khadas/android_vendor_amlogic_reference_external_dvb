@@ -9,7 +9,7 @@
 /**\file
  * \brief Driver event module
  *
- * Event is driver asyncronized message callback mechanism.
+ * Event is driver synchronized message callback mechanism.
  * User can register multiply callback functions in one event.
  *
  * \author Gong Ke <ke.gong@amlogic.com>
@@ -89,7 +89,7 @@ extern AM_ErrorCode_t AM_EVT_Unsubscribe(long dev_no, int event_type, AM_EVT_Cal
 extern AM_ErrorCode_t AM_EVT_Signal(long dev_no, int event_type, void *param);
 
 extern AM_ErrorCode_t AM_EVT_Init();
-extern AM_ErrorCode_t AM_EVT_Destory();
+extern AM_ErrorCode_t AM_EVT_Destroy();
 
 #ifdef __cplusplus
 }

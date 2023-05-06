@@ -24,7 +24,7 @@
 /*!
  * \file <demux.h>
  * \author Johan Bilien <jobi@via.ecp.fr>
- * \brief Subtable demutiplexor.
+ * \brief Subtable demultiplexer.
  *
  * Subtable demultiplexor structure
  */
@@ -125,7 +125,7 @@ typedef struct dvbpsi_demux_s
 /*!
  * \fn dvbpsi_handle_t dvbpsi_NewPSISection(dvbpsi_demux_new_cb_t pf_new_cb, void * p_new_cb_data)
  * \brief Creates a new demux structure.
- * \param pf_new_cb A callcack called when a new type of subtable is found.
+ * \param pf_new_cb A callback called when a new type of subtable is found.
  * \param p_new_cb_data Data given to the previous callback.
  * \return a handle to the new demux structure.
  */

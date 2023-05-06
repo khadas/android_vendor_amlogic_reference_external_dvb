@@ -41,7 +41,7 @@ enum AM_CFG_ErrorCode
 	AM_CFG_ERR_FILE_IO,		/**< 文件输入输出错误*/
 	AM_CFG_ERR_NO_MEM,		/**< 内存不足*/
 	AM_CFG_ERR_SYNTAX,		/**< 配置文件语法错误*/
-	AM_CFG_ERR_BAD_FOTMAT,		/**< 键值格式错误*/
+	AM_CFG_ERR_BAD_FORMAT,		/**< 键值格式错误*/
 	AM_CFG_ERR_UNKNOWN_TAG,		/**< 解析到未知的标记*/
 	AM_CFG_ERR_NOT_SUPPORT,		/**< 不支持的格式*/
 	AM_CFG_ERR_END

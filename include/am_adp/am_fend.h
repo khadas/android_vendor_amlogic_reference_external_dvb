@@ -148,7 +148,7 @@ extern AM_ErrorCode_t AM_FEND_Close(int dev_no);
 extern AM_ErrorCode_t AM_FEND_CloseEx(int dev_no, AM_Bool_t reset);
 
 
-/**\brief set frontend deivce mode
+/**\brief set frontend device mode
  * \param dev_no frontend device number
  * \param mode frontend demod mode
  * \return
@@ -157,9 +157,9 @@ extern AM_ErrorCode_t AM_FEND_CloseEx(int dev_no, AM_Bool_t reset);
  */
 extern AM_ErrorCode_t AM_FEND_SetMode(int dev_no, int mode);
 
-/**\brief get frontend device infomation
+/**\brief get frontend device information
  * \param dev_no frontend device number
- * \param[out] info return frontend infomation struct
+ * \param[out] info return frontend information struct
  * \return
  *   - AM_SUCCESS On success
  *   - or error code
@@ -168,7 +168,7 @@ extern AM_ErrorCode_t AM_FEND_GetInfo(int dev_no, struct dvb_frontend_info *info
 
 /**\brief get a frontend device's ts source
  * \param dev_no frontend device number
- * \param[out] src retrun device's ts source
+ * \param[out] src return device's ts source
  * \return
  *   - AM_SUCCESS On success
  *   - or error code
@@ -398,7 +398,7 @@ extern AM_ErrorCode_t AM_FEND_BlindGetProcess(int dev_no, unsigned int *process)
 AM_ErrorCode_t AM_FEND_BlindGetTPCount(int dev_no, unsigned int *count);
 
 
-/**\brief get blind scan TP infomation
+/**\brief get blind scan TP information
  * \param dev_no frontend device number
  * \param[out] para blindscan parameters
  * \param[out] count parameters's count
@@ -457,7 +457,7 @@ AM_ErrorCode_t AM_FEND_SetSubSystem(int dev_no, unsigned int sub_sys);
 
 /**\brief try to get sub sys
  *\param dev_no frontend device number
- *\param sub_sys fend type,use to indentify T or T2,C-A C-B OR C-C
+ *\param sub_sys fend type,use to identify T or T2,C-A C-B OR C-C
  * \return
  *   - AM_SUCCESS On success
  *   - or error code

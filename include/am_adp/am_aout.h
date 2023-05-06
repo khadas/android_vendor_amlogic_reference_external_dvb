@@ -28,8 +28,8 @@ extern "C"
  * Macro definitions
  ***************************************************************************/
 
-#define AM_AOUT_VOLUME_MIN 0   /**< The minimum volumn value */
-#define AM_AOUT_VOLUME_MAX 100 /**< The maximum volumn value */
+#define AM_AOUT_VOLUME_MIN 0   /**< The minimum volume value */
+#define AM_AOUT_VOLUME_MAX 100 /**< The maximum volume value */
 
 /****************************************************************************
  * Error code definitions
@@ -62,7 +62,7 @@ enum AM_AOUT_ErrorCode
 enum AM_AOUT_EventType
 {
 	AM_AOUT_EVT_BASE=AM_EVT_TYPE_BASE(AM_MOD_AOUT),
-	AM_AOUT_EVT_VOLUME_CHANGED,          /**< Volumn has been changed，the parameter is the volumn value (int 0~100)*/
+	AM_AOUT_EVT_VOLUME_CHANGED,          /**< Volume has been changed，the parameter is the volume value (int 0~100)*/
 	AM_AOUT_EVT_MUTE_CHANGED,            /**< Mute/Unmute status changed，the parameter is the new mute status (AM_Bool_t)*/
 	AM_AOUT_EVT_OUTPUT_MODE_CHANGED,     /**< Audio output mode changed，the parameter is the new mode (AM_AOUT_OutputMode_t)*/
 	AM_AOUT_EVT_PREGAIN_CHANGED,         /**< Pregain value changed，the parameter is the new pregain value*/
@@ -108,7 +108,7 @@ extern AM_ErrorCode_t AM_AOUT_Open(int dev_no, const AM_AOUT_OpenPara_t *para);
  */
 extern AM_ErrorCode_t AM_AOUT_Close(int dev_no);
 
-/**\brief Set the volumn of the audio output (0~100)
+/**\brief Set the volume of the audio output (0~100)
  * \param dev_no Audio output device number
  * \param vol Volumn number (0~100)
  * \retval AM_SUCCESS On success
@@ -116,9 +116,9 @@ extern AM_ErrorCode_t AM_AOUT_Close(int dev_no);
  */
 extern AM_ErrorCode_t AM_AOUT_SetVolume(int dev_no, int vol);
 
-/**\brief Get the current volumn of the audio output
+/**\brief Get the current volume of the audio output
  * \param dev_no Audio output device number
- * \param[out] vol Return the volumn value
+ * \param[out] vol Return the volume value
  * \retval AM_SUCCESS On success
  * \return Error code
  */

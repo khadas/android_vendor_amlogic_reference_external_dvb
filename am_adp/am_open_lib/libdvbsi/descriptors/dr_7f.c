@@ -46,7 +46,7 @@
 /*****************************************************************************
  * dvbpsi_Decode_Exten_Sup_Audio_Dr
  *****************************************************************************/
-int dvbpsi_Decode_Exten_Sup_Audio_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
+int dvbpsi_Decode_Exten_Sup_Audio_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
 {
     AM_DEBUG(1, "dr_7f dvbpsi_Decode_Exten_Sup_Audio_Dr ");
   /*1 5 1 1 8bit mix:1 edit:5 re:1 lang:1*/
@@ -67,7 +67,7 @@ int dvbpsi_Decode_Exten_Sup_Audio_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t 
 /*****************************************************************************
  * dvbpsi_Decode_Exten_AC4_Audio_Dr
  *****************************************************************************/
-int dvbpsi_Decode_Exten_AC4_Audio_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
+int dvbpsi_Decode_Exten_AC4_Audio_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
 {
 	AM_DEBUG(1, "dr_7f dvbpsi_Decode_Exten_AC4_Audio_Dr ");
 	/*1 5 1 1 8bit mix:1 edit:5 re:1 lang:1*/
@@ -79,10 +79,10 @@ int dvbpsi_Decode_Exten_AC4_Audio_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t 
 /*****************************************************************************
  * dvbpsi_Decode_Exten_AC4_Audio_Dr
  *****************************************************************************/
-int dvbpsi_Decode_Exten_Audio_Preselection_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
+int dvbpsi_Decode_Exten_Audio_Preselection_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
 {
 	AM_DEBUG(1, "dr_7f dvbpsi_Decode_Exten_Audio_Preselection_Dr ");
-	dvbpsi_EXTENTION_audio_preselection_t* ap = &p_decoded->exten_t.audio_preselection;
+	dvbpsi_EXTENSION_audio_preselection_t* ap = &p_decoded->exten_t.audio_preselection;
 	ap->num_preselections = (p_data[1]&0xF8)>>3; /*1111 1000*/
 	ap->reserved_zero_future_use = (p_data[1]&0x07); /*0000 0111*/
 	if (ap->num_preselections <= 0)
@@ -98,7 +98,7 @@ int dvbpsi_Decode_Exten_Audio_Preselection_Dr(dvbpsi_EXTENTION_dr_t * p_decoded,
 	for (int i=0;i<ap->num_preselections;i++)
 	{
 		// Considering the skipped preselection item, here is 'i-num_skipped_presel'
-		dvbpsi_EXTENTION_preselection_t* ps_i = &ap->preselections[i-num_skipped_presel];
+		dvbpsi_EXTENSION_preselection_t* ps_i = &ap->preselections[i-num_skipped_presel];
 		int extra=0;
 		ps_i->preselection_id = (data[0]&0xF8)>>3;
 		ps_i->audio_rendering_indication = (data[0]&0x07);
@@ -143,10 +143,10 @@ int dvbpsi_Decode_Exten_Audio_Preselection_Dr(dvbpsi_EXTENTION_dr_t * p_decoded,
 	return 0;
 }
 
-int dvbpsi_Decode_Exten_Message_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
+int dvbpsi_Decode_Exten_Message_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
 {
 	AM_DEBUG(1, "dr_7f %s", __func__);
-	dvbpsi_EXTENTION_message_t* ap = &p_decoded->exten_t.message;
+	dvbpsi_EXTENSION_message_t* ap = &p_decoded->exten_t.message;
 	ap->message_id = p_data[1];
 	strncpy(ap->iso_639_language_code,p_data+2,3);
 	int text_len = i_length-5;
@@ -160,12 +160,12 @@ int dvbpsi_Decode_Exten_Message_Dr(dvbpsi_EXTENTION_dr_t * p_decoded, uint8_t * 
 }
 
 /*****************************************************************************
- * dvbpsi_DecodeEXTENTIONDr
+ * dvbpsi_DecodeEXTENSIONDr
  *****************************************************************************/
-dvbpsi_EXTENTION_dr_t * dvbpsi_DecodeEXTENTIONDr(dvbpsi_descriptor_t * p_descriptor)
+dvbpsi_EXTENSION_dr_t * dvbpsi_DecodeEXTENSIONDr(dvbpsi_descriptor_t * p_descriptor)
 {
-    dvbpsi_EXTENTION_dr_t * p_decoded;
-    AM_DEBUG(1, "dr_7f dvbpsi_DecodeEXTENTIONDr ");
+  dvbpsi_EXTENSION_dr_t * p_decoded;
+  AM_DEBUG(1, "dr_7f dvbpsi_DecodeEXTENSIONDr ");
   /* Check the tag */
   if (p_descriptor->i_tag != 0x7f)
   {
@@ -180,7 +180,7 @@ dvbpsi_EXTENTION_dr_t * dvbpsi_DecodeEXTENTIONDr(dvbpsi_descriptor_t * p_descrip
 
   /* Allocate memory */
   p_decoded =
-        (dvbpsi_EXTENTION_dr_t *)malloc(sizeof(dvbpsi_EXTENTION_dr_t));
+        (dvbpsi_EXTENSION_dr_t *)malloc(sizeof(dvbpsi_EXTENSION_dr_t));
   if (!p_decoded)
   {
     DVBPSI_ERROR("dr_7f decoder", "out of memory");
@@ -202,8 +202,8 @@ dvbpsi_EXTENTION_dr_t * dvbpsi_DecodeEXTENTIONDr(dvbpsi_descriptor_t * p_descrip
     case AM_SI_EXTEN_DESCR_CP:
       AM_DEBUG(1, "dr_7f exten tag AM_SI_EXTEN_DESCR_CP ");
       break;
-    case AM_SI_EXTEN_DESCR_CP_IDENTIFITER:
-      AM_DEBUG(1, "dr_7f exten tag AM_SI_EXTEN_DESCR_CP_IDENTIFITER ");
+    case AM_SI_EXTEN_DESCR_CP_IDENTIFIER:
+      AM_DEBUG(1, "dr_7f exten tag AM_SI_EXTEN_DESCR_CP_IDENTIFIER ");
       break;
     case AM_SI_EXTEN_DESCR_T2_DELIVERY_SYS:
       AM_DEBUG(1, "dr_7f exten tag AM_SI_EXTEN_DESCR_T2_DELIVERY_SYS ");

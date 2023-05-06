@@ -60,8 +60,8 @@ typedef struct stt_section
     INT8U system_time_ml 		:8;
     INT8U system_time_lo		:8;
     INT8U GPS_UTC_offset		:8;
-    INT8U dalight_saving_hi 	:8;
-    INT8U dalight_saving_lo 	:8;
+    INT8U daylight_saving_hi 	:8;
+    INT8U daylight_saving_lo 	:8;
 	
 }stt_section_t;
 

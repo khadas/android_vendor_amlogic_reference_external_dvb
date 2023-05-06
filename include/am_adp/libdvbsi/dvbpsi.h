@@ -49,7 +49,7 @@ typedef struct dvbpsi_s dvbpsi_t;
  *****************************************************************************/
 /*!
  * \typedef struct dvbpsi_decoder_s * dvbpsi_handle
- * \brief Decoder abstration.
+ * \brief Decoder abstraction.
  */
 typedef struct dvbpsi_decoder_s * dvbpsi_handle;
 

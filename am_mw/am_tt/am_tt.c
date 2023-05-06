@@ -1023,7 +1023,7 @@ AM_ErrorCode_t AM_TT_SetCurrentPageCode(unsigned short wPageCode, unsigned short
         	teletext_draw_display_message(VT_PAGENOTFIND);
 		}));
 
-        	return AM_TT_ERR_PAGE_NOT_EXSIT;
+		return AM_TT_ERR_PAGE_NOT_EXIST;
     	}
 	    if (context_tele.auto_page_status == TRUE)
 	    {
@@ -1569,7 +1569,7 @@ AM_ErrorCode_t AM_TT_NextSubPage()
     nRetCode = GetNextDisplaySubPage(dwPageCode, &context_tele.sCurrPage, FALSE);
     if (nRetCode == 0)
     {
-        return AM_TT_ERR_PAGE_NOT_EXSIT;
+        return AM_TT_ERR_PAGE_NOT_EXIST;
     }
 
     GetDisplayHeader(&context_tele.sCurrPage, TRUE);
@@ -1606,7 +1606,7 @@ AM_ErrorCode_t AM_TT_PreviousSubPage()
     nRetCode = GetNextDisplaySubPage(dwPageCode, &context_tele.sCurrPage, TRUE);
     if (nRetCode == 0)
     {
-        return AM_TT_ERR_PAGE_NOT_EXSIT;
+        return AM_TT_ERR_PAGE_NOT_EXIST;
     }
 
     GetDisplayHeader(&context_tele.sCurrPage, TRUE);
@@ -1647,7 +1647,7 @@ AM_ErrorCode_t AM_TT_NextPage()
 
     if (nRetCode == 0)
     {
-        return AM_TT_ERR_PAGE_NOT_EXSIT;;
+        return AM_TT_ERR_PAGE_NOT_EXIST;;
     }
     if (context_tele.auto_page_status == TRUE)
     {
@@ -1694,7 +1694,7 @@ AM_ErrorCode_t AM_TT_PreviousPage()
 
     if (nRetCode == 0)
     {
-        return AM_TT_ERR_PAGE_NOT_EXSIT;
+        return AM_TT_ERR_PAGE_NOT_EXIST;
     }
 
 

@@ -44,7 +44,7 @@ enum AM_TT_ErrorCode
 	AM_TT_ERR_CANNOT_CREATE_THREAD,/**< 无法创建线程*/
 	AM_TT_ERR_NOT_RUN,             /**< 没有运行teletext*/
 	AM_TT_ERR_NOT_START,           /**< 没有开始*/
-	AM_TT_ERR_PAGE_NOT_EXSIT,      /**< 请求页不存在*/
+	AM_TT_ERR_PAGE_NOT_EXIST,      /**< 请求页不存在*/
 	AM_TT_INIT_DISPLAY_FAILED,     /**< 初始化显示屏幕失败*/
 	AM_TT_INIT_FONT_FAILED,        /**< 初始化字体失败*/
 	AM_TT_ERR_END

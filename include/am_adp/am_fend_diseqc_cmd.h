@@ -64,7 +64,7 @@ typedef enum AM_FEND_SWITCHINPUT
 	AM_FEND_SWITCH4INPUTB	
 }AM_FEND_Switchinput_t; 
 
-/**\brief DVB-S/S2 frontend polraisation*/
+/**\brief DVB-S/S2 frontend polarisation*/
 typedef enum AM_FEND_POLARISATION
 {
 	AM_FEND_POLARISATION_H,
@@ -262,7 +262,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetChannelFreq(int dev_no, int freq);
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetPositionerHalt(int dev_no);
 
 /**\brief enable positioner limit (Diseqc1.2 M)
- * \param dev_no frontend deivce number
+ * \param dev_no frontend device number
  * \return
  *   - AM_SUCCESS On success
  *   - or error code
@@ -340,7 +340,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_GotoPositioner(int dev_no, unsigned char
  */
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_GotoxxAngularPositioner(int dev_no, double local_longitude, double local_latitude, double satellite_longitude);
 
-/**\brief position satellite with angular (USALS(another name Diseqc1.3) Diseqc extention)
+/**\brief position satellite with angular (USALS(another name Diseqc1.3) Diseqc extension)
  * \param dev_no frontend device number
  * \param local_longitude
  * \param local_latitude
@@ -351,7 +351,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_GotoxxAngularPositioner(int dev_no, doub
  */
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_GotoAngularPositioner(int dev_no, double local_longitude, double local_latitude, double satellite_longitude);
                                                                        
-/**\brief set ODU channel (Diseqc extention)
+/**\brief set ODU channel (Diseqc extension)
  * \param dev_no frontend device number
  * \param ub_number user band number(0-7)
  * \param inputbank_number input bank number (0-7)
@@ -365,7 +365,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_GotoAngularPositioner(int dev_no, double
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUChannel(int dev_no, unsigned char ub_number, unsigned char inputbank_number,
 																int transponder_freq, int oscillator_freq, int ub_freq);
        
-/**\brief set ODU UB to power off (Diseqc extention)
+/**\brief set ODU UB to power off (Diseqc extension)
  * \param dev_no frontend device numner
  * \param ub_number user band number(0-7)  
  * \return
@@ -374,7 +374,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUChannel(int dev_no, unsigned char 
  */
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUPowerOff(int dev_no, unsigned char ub_number); 
 
-/**\brief set ODU UB to signal on (Diseqc extention)
+/**\brief set ODU UB to signal on (Diseqc extension)
  * \param dev_no frontend device number
  * \return
  *   - AM_SUCCESS On success
@@ -382,7 +382,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUPowerOff(int dev_no, unsigned char
  */
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUUbxSignalOn(int dev_no);
                                                                  
-/**\brief set ODU config(Diseqc extention)
+/**\brief set ODU config(Diseqc extension)
  * \param dev_no frontend device number
  * \param ub_number user band number(0-7)
  * \param satellite_position_count
@@ -399,7 +399,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUConfig(int dev_no, unsigned char u
 																AM_FEND_RFType_t rf_type,
 																unsigned char ub_count);
                                                                   
-/**\brief se ODU local oscillator (Diseqc extention)
+/**\brief se ODU local oscillator (Diseqc extension)
  * \param dev_no frontend device number
  * \param ub_number user band number(0-7)    
  * \param lot parameter in local oscillator table
@@ -410,7 +410,7 @@ extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODUConfig(int dev_no, unsigned char u
 extern AM_ErrorCode_t AM_FEND_Diseqccmd_SetODULoFreq(int dev_no, unsigned char ub_number, AM_FEND_LOT_t lot);                                                                  
                                                                                
 
-/**\brief produce satellite angular (USALS(another name Diseqc1.3) Diseqc extention)
+/**\brief produce satellite angular (USALS(another name Diseqc1.3) Diseqc extension)
  * \param dev_no frontend device number
  * \param local_longitude
  * \param local_latitude

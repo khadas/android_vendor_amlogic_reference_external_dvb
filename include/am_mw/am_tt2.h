@@ -40,7 +40,7 @@ enum AM_TT2_ErrorCode
 	AM_TT2_ERROR_BASE=AM_ERROR_BASE(AM_MOD_SUB2),
 	AM_TT2_ERR_INVALID_PARAM,   /**< Invalid parameter*/
 	AM_TT2_ERR_INVALID_HANDLE,  /**< Invalid handle*/
-	AM_TT2_ERR_NOT_SUPPORTED,   /**< not surport action*/
+	AM_TT2_ERR_NOT_SUPPORTED,   /**< not support action*/
 	AM_TT2_ERR_CREATE_DECODE,   /**< open Teletext decode error*/
 	AM_TT2_ERR_OPEN_PES,        /**< open pes filter error*/
 	AM_TT2_ERR_SET_BUFFER,      /**< set pes buffer error*/
@@ -116,7 +116,7 @@ typedef struct
  */
 extern AM_ErrorCode_t AM_TT2_Create(AM_TT2_Handle_t *handle, AM_TT2_Para_t *para);
 
-/**\brief destory teletext parser handle
+/**\brief destroy teletext parser handle
  * \param handle the handle of parser
  * \retval AM_SUCCESS On success
  * \return Error code

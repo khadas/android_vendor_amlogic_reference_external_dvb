@@ -227,14 +227,14 @@ AM_ErrorCode_t AM_CAMAN_Resume(void);
 
 /*CA open/close*/
 
-/**\brief Open registed CA
+/**\brief Open registered CA
  * \param [in] name CA name
  * \retval AM_SUCCESS On success
  * \return Error code
  */
 AM_ErrorCode_t AM_CAMAN_openCA(char *name);
 
-/**\brief Close registed CA
+/**\brief Close registered CA
  * \param [in] name CA name
  * \retval AM_SUCCESS On success
  * \return Error code
