@@ -27,6 +27,9 @@
 #include "pthread.h"
 #include "memwatch.h"
 #include "semaphore.h"
+#ifdef ANDROID
+#include <sys/system_properties.h>
+#endif
 #include <am_ad.h>
 #include <am_misc.h>
 #include <am_dmx.h>
@@ -187,7 +190,14 @@ AM_AD_Create(AM_AD_Handle_t *handle, AM_AD_Para_t *para)
 		goto error;
 
 	pes_para.packet = pes_packet_callback;
-	pes_para.payload_only = AM_TRUE;
+#ifdef ANDROID
+	if (property_get_bool("vendor.media.dtv.pesmode",true)) {
+		pes_para.payload_only = AM_FALSE;
+	} else
+#endif
+	{
+		pes_para.payload_only = AM_TRUE;
+	}
 	pes_para.user_data = ad;
 	pes_para.afmt = para->fmt;
 	ret = AM_PES_Create(&ad->h_pes, &pes_para);
