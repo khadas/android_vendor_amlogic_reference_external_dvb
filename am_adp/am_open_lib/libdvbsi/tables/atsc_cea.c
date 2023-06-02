@@ -347,6 +347,7 @@ static void dvbpsi_atsc_CEAPaserMulti(dvbpsi_atsc_cea_t* p_cea,
                                             uint8_t i_len,
                                             uint8_t *buf)
 {
+    (void)i_len;
     uint8_t *p_byte =  buf;
     uint8_t multi_text_len = p_byte[0];
     uint8_t i = 0;

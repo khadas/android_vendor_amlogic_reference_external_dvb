@@ -340,9 +340,9 @@ vbi_text_to_json (struct vbi_page *pg, uint8_t *buf, int len, vbi_char *st, Outp
 
 	if (o && (out->flash))
 	{
-		for (i=0; i<strlen(buf);i++)
+		for (i=0; i<strlen((char *)buf);i++)
 			blank_str[i] = 0x20;
-		blank_str[strlen(buf)] = 0;
+		blank_str[strlen((char *)buf)] = 0;
 		if (o_str_prop(out, "data", (char*)blank_str) < 0)
 			return -1;
 	}
@@ -779,12 +779,12 @@ row_to_json (struct tvcc_decoder *td, struct dtvcc_window *win, Output *out, int
 		AM_DEBUG(0, "cc_json convert json in kor lang");
 		if (c) {
 			iconv_t cd = iconv_open("utf-8", "euc-kr");
-			if (cd == -1)
+			if (cd == (iconv_t)-1)
 				AM_DEBUG(0, "iconv open failed");
 			char tobuffer[16] = {0};
 			size_t outLen = 16;
 			size_t inLen = 2;
-			char* in_pointer = &c;
+			char* in_pointer = (char *)&c;
 			char inbuffer[2];
 			char* srcStart = inbuffer;
 			if (!in_pointer[1])
@@ -799,11 +799,11 @@ row_to_json (struct tvcc_decoder *td, struct dtvcc_window *win, Output *out, int
 			}
 			char* tmpTobuffer = tobuffer;
 			*pt = *cpt;
-			int ret_len = iconv(cd, (const char**)&srcStart, (size_t *)&inLen, &tmpTobuffer, (size_t *)&outLen);
+			int ret_len = iconv(cd, &srcStart, (size_t *)&inLen, &tmpTobuffer, (size_t *)&outLen);
 			AM_DEBUG(0, "ret: %d in: %02x%02x inLen: %d outLen: %d out: %s outlen: %d %x",
 				ret_len, inbuffer[0], inbuffer[1], inLen, outLen, tobuffer, strlen(tobuffer), tobuffer[0]);
 			iconv_close(cd);
-			strcpy(pb, tobuffer);
+			strcpy((char *)pb, tobuffer);
 			len += strlen(tobuffer);
 			pb += strlen(tobuffer);
 		}

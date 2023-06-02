@@ -1005,7 +1005,7 @@ static void am_epg_gen_event_text(atsc_multiple_string_t *multi_string, char *mu
 	const uint8_t split = 0x80;
 	int i, cur_len, tmp_len, n;
 
-#define COPY_BYTES(_d, _dlen, _s, _slen, _curdlen)\
+#define COPY_BYTES_2(_d, _dlen, _s, _slen, _curdlen)\
 	AM_MACRO_BEGIN\
 		int copy_len = ((_curdlen+_slen)>=_dlen) ? (_dlen-_curdlen) : _slen;\
 		if (copy_len > 0) {\
@@ -1023,13 +1023,13 @@ static void am_epg_gen_event_text(atsc_multiple_string_t *multi_string, char *mu
 		if (i != 0)
 		{
 			/* extra split mark */
-			COPY_BYTES(multi_text, len, &split, 1, cur_len);
+			COPY_BYTES_2(multi_text, len, &split, 1, cur_len);
 		}
 		/* 3 bytes language code at first */
-		COPY_BYTES(multi_text, len, multi_string->string[i].iso_639_code, 3, cur_len);
+		COPY_BYTES_2(multi_text, len, multi_string->string[i].iso_639_code, 3, cur_len);
 		/* following by its text */
 		tmp_len = strlen(text);
-		COPY_BYTES(multi_text, len, text, tmp_len, cur_len);
+		COPY_BYTES_2(multi_text, len, text, tmp_len, cur_len);
 
 	}
 

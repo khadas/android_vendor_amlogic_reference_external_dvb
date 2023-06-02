@@ -28,5 +28,7 @@ int AM_CRYPT_des_close(void *cryptor)
 
 void AM_CRYPT_des_crypt(void* cryptor, uint8_t* dst, const uint8_t *src, int len, uint8_t *iv, int decrypt)
 {
+    (void)len;
+	(void)iv;
 	av_des_crypt_ts_packet((AVDES *)cryptor, dst, src, decrypt);
 }

@@ -2118,7 +2118,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
 						dvbpsi_EXTENSION_preselection_t* ps = &ap->preselections[i];
 						int id = ps->preselection_id;
 						int msg_id = (ps->text_label_present ? ps->message_id : -1);
-						si_add_audio(aud_info, es->i_pid, afmt_tmp, ps->iso_639_language_code,
+						si_add_audio(aud_info, es->i_pid, afmt_tmp, (char *)ps->iso_639_language_code,
 								audio_type, audio_exten, id, msg_id);
 					}
 				}

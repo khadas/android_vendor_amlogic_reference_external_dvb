@@ -96,7 +96,10 @@ dvbpsi_descriptor_t * dvbpsi_GenContentDr(
                                         dvbpsi_content_dr_t * p_decoded,
                                         int b_duplicate)
 {
-	/*We don't support yet*/
-	return NULL;
+  (void)p_decoded;
+  (void)b_duplicate;
+
+  /*We don't support yet*/
+  return NULL;
 }
 

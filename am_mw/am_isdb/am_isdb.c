@@ -543,6 +543,7 @@ static void set_writing_format(ctx_t *ctx, uint8_t *arg)
 
 static int parse_csi(ctx_t *ctx, const uint8_t *buf, int len)
 {
+	UNUSED(len);
 	uint8_t arg[10] = {0};
 	int i = 0;
 	int ret = 0;
@@ -696,6 +697,7 @@ static int ccx_strstr_ignorespace(const unsigned char *str1, const unsigned char
 
 static struct ISDBText *allocate_text_node(ISDBSubLayout *ls)
 {
+	UNUSED(ls);
 	struct ISDBText *text = NULL;
 
 	text = malloc(sizeof(struct ISDBText));
@@ -1116,9 +1118,9 @@ static int reserve_buf(struct ISDBText *text, size_t len)
 		isdb_log("ISDB: out of memory for ctx->text.buf\n");
 		return AM_FAILURE;
 	}
-	text->buf = ptr;
+	text->buf = (char *)ptr;
 	text->len = blen;
-	isdb_log ("expanded ctx->text(%lu)\n", blen);
+	isdb_log ("expanded ctx->text(%zu)\n", blen);
 	return AM_SUCCESS;
 }
 
@@ -1263,11 +1265,11 @@ static int get_text(ctx_t *ctx, unsigned char *buffer, int len)
 			int found = AM_FAILURE;
 			list_for_each_entry(sb_text, &ctx->buffered_text, list, struct ISDBText)
 			{
-				if (ccx_strstr_ignorespace(text->buf, sb_text->buf))
+				if (ccx_strstr_ignorespace((unsigned char *)text->buf, (unsigned char *)sb_text->buf))
 				{
 					found = AM_SUCCESS;
 					//See if complete string is there if not update that string
-					if (!ccx_strstr_ignorespace(sb_text->buf, text->buf))
+					if (!ccx_strstr_ignorespace((unsigned char *)sb_text->buf, (unsigned char *)text->buf))
 					{
 						reserve_buf(sb_text, text->used);
 						memcpy(sb_text->buf, text->buf, text->used);
@@ -1292,7 +1294,7 @@ static int get_text(ctx_t *ctx, unsigned char *buffer, int len)
 			int found = AM_FAILURE;
 			list_for_each_entry(text, &ctx->text_list_head, list, struct ISDBText)
 			{
-				if (ccx_strstr_ignorespace(text->buf, sb_text->buf))
+				if (ccx_strstr_ignorespace((unsigned char *)text->buf, (unsigned char *)sb_text->buf))
 				{
 					found = AM_SUCCESS;
 					break;
@@ -1378,6 +1380,8 @@ static int parse_statement(void* handle, const uint8_t *buf, int size)
 
 static int parse_data_unit(void* handle,const uint8_t *buf, int size)
 {
+	UNUSED(size);
+
 	int unit_parameter;
 	int len;
 	AM_ISDB_Parser_t *parser = handle;
@@ -1401,6 +1405,10 @@ static int parse_data_unit(void* handle,const uint8_t *buf, int size)
 
 static int parse_caption_statement_data(void *handle, int lang_id, const uint8_t *buf, int size, struct cc_subtitle *sub)
 {
+	UNUSED(lang_id);
+	UNUSED(size);
+	UNUSED(sub);
+
 	int tmd;
 	int len;
 	int ret;
@@ -1443,6 +1451,7 @@ static int parse_caption_statement_data(void *handle, int lang_id, const uint8_t
 
 static int parse_caption_management_data(void *handle, const uint8_t *buf, int size)
 {
+	UNUSED(size);
 	const uint8_t *buf_pivot = buf;
 	int i;
 	AM_ISDB_Parser_t *parser = handle;
@@ -1613,6 +1622,7 @@ AM_ErrorCode_t AM_ISDB_Create(AM_Isdb_CreatePara_t* para, AM_ISDB_Handle_t* hand
 
 AM_ErrorCode_t AM_ISDB_Start(AM_Isdb_StartPara_t *para, AM_ISDB_Handle_t handle)
 {
+	UNUSED(para);
 	AM_ISDB_Parser_t *parser = handle;
 	return AM_SUCCESS;
 }
@@ -1626,6 +1636,7 @@ AM_ErrorCode_t AM_ISDB_Stop(AM_ISDB_Handle_t handle)
 
 AM_ErrorCode_t AM_ISDB_Decode(AM_ISDB_Handle_t handle, uint8_t *buf, int size)
 {
+	UNUSED(size);
 	int i, pes_packet_length, pes_header_length, scrambling_control, pts_dts_flag;
 	AM_ISDB_Parser_t *parser = (AM_ISDB_Parser_t*)handle;
 	const uint8_t *header_end = NULL;

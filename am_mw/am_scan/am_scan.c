@@ -18,6 +18,7 @@
 
 #define AM_DEBUG_LEVEL 2
 
+#include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
 #include <fcntl.h>
@@ -989,6 +990,8 @@ static int am_scan_check_skip(AM_SCAN_ServiceInfo_t *srv_info, int mode)
 /***\brief 更新一个TS数据*/
 static void am_scan_update_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, int net_dbid, int dbid, AM_SCAN_TS_t *ts)
 {
+	UNUSED(result);
+
 	int ts_id = -1;
 	int symbol_rate=0, modulation=0, dvbt_flag=0;
 
@@ -1416,7 +1419,7 @@ static void am_scan_extract_srv_info_from_vc(dvbpsi_atsc_vct_channel_t *vcinfo, 
 	srv_info->hide_guide = vcinfo->b_hide_guide;
 	srv_info->source_id = vcinfo->i_source_id;
 	memcpy(srv_info->name, "xxx", 3);
-	if (AM_SI_ConvertToUTF8(vcinfo->i_short_name, 14, name, 32, "utf-16") != AM_SUCCESS)
+	if (AM_SI_ConvertToUTF8((char *)vcinfo->i_short_name, 14, name, 32, "utf-16") != AM_SUCCESS)
 		strcpy(name, "No Name");
 	memcpy(srv_info->name+3, name, sizeof(name));
 	srv_info->name[sizeof(name)+3] = 0;
@@ -3451,7 +3454,7 @@ static void am_scan_mgt_done(AM_SCAN_Scanner_t *scanner)
 					is_cable_vct = AM_TRUE;
 				}
 			}
-		} while (p_table = p_table->p_next);
+		} while ((p_table = p_table->p_next));
 
 		AM_DEBUG(1, "mgt has vct cvct:[%d] tvct:[%d]", is_cable_vct, is_tvct);
 		if (!is_cable_vct && is_tvct) {
@@ -4048,7 +4051,7 @@ static AM_ErrorCode_t am_scan_atv_step_tune(AM_SCAN_Scanner_t *scanner)
 			/* Set frontend */
 			AM_FEND_SetMode(scanner->start_para.fend_dev_id, FE_ANALOG);/* release FE for VLFE */
 			AM_VLFEND_SetMode(scanner->start_para.vlfend_dev_id, FE_ANALOG);/* set mode for VLFE */
-			ret = AM_VLFEND_SetPara(scanner->start_para.vlfend_dev_id, &cur_fe_para);
+			ret = AM_VLFEND_SetPara(scanner->start_para.vlfend_dev_id, (struct dvb_frontend_parameters *)&cur_fe_para);
 			if (ret == AM_SUCCESS)
 			{
 				scanner->recv_status |= AM_SCAN_RECVING_WAIT_FEND;
@@ -4273,7 +4276,7 @@ static AM_ErrorCode_t am_scan_start_ts(AM_SCAN_Scanner_t *scanner, int step)
 		if (cur_fe_para.m_type == FE_ANALOG) {
 			AM_FEND_SetMode(scanner->start_para.fend_dev_id, FE_ANALOG);/* release FE for VLFE */
 			AM_VLFEND_SetMode(scanner->start_para.vlfend_dev_id, FE_ANALOG);/* set mode for VLFE */
-			ret = AM_VLFEND_SetPara(scanner->start_para.vlfend_dev_id, &cur_fe_para);
+			ret = AM_VLFEND_SetPara(scanner->start_para.vlfend_dev_id, (struct dvb_frontend_parameters *)&cur_fe_para);
 		} else {
 			AM_VLFEND_SetMode(scanner->start_para.vlfend_dev_id, 0);/* release VLFE for FE */
 			ret = AM_FENDCTRL_SetPara(scanner->start_para.fend_dev_id, &cur_fe_para);
@@ -4307,11 +4310,11 @@ static AM_ErrorCode_t am_scan_start_current_ts(AM_SCAN_Scanner_t *scanner)
 
 static void am_scan_fend_callback(long dev_no, int event_type, void *param, void *user_data)
 {
-	struct dvb_frontend_event *evt = (struct dvb_frontend_event*)param;
-	AM_SCAN_Scanner_t *scanner = (AM_SCAN_Scanner_t*)user_data;
-
 	UNUSED(dev_no);
 	UNUSED(event_type);
+
+	struct dvb_frontend_event *evt = (struct dvb_frontend_event*)param;
+	AM_SCAN_Scanner_t *scanner = (AM_SCAN_Scanner_t*)user_data;
 
 	if (!scanner || !evt || (evt->status == 0))
 		return;
@@ -4325,11 +4328,12 @@ static void am_scan_fend_callback(long dev_no, int event_type, void *param, void
 
 static void atv_scan_fend_callback(long dev_no, int event_type, void *param, void *user_data)
 {
+	UNUSED(dev_no);
+	UNUSED(event_type);
 	//struct v4l2_frontend_event *evt = (struct v4l2_frontend_event*)param;
 	struct dvb_frontend_event *evt = (struct dvb_frontend_event*)param;
 	AM_SCAN_Scanner_t *scanner = (AM_SCAN_Scanner_t*)user_data;
 
-	UNUSED(dev_no);
 
 	if (!scanner || !evt || (evt->status == 0))
 		return;
@@ -4354,6 +4358,7 @@ static void atv_scan_fend_callback(long dev_no, int event_type, void *param, voi
 /**\brief 卫星BlindScan回调*/
 static void am_scan_blind_scan_callback(int dev_no, AM_FEND_BlindEvent_t *evt, void *user_data)
 {
+	UNUSED(dev_no);
 	AM_SCAN_Scanner_t *scanner = (AM_SCAN_Scanner_t*)user_data;
 
 	if (!scanner)
@@ -5185,7 +5190,7 @@ static int am_scan_new_ts_locked_proc(AM_SCAN_Scanner_t *scanner)
 				AM_DEBUG(1, "Skip program for atv pal mode at lock proc");
 				goto next_ts;
 			} else {
-				AM_DEBUG(1, "not Skip program for atv pal mode at lock proc std[%x]pal[%x]mode[%d]", (unsigned int) para.u.analog.std, V4L2_COLOR_STD_PAL, mode);
+				AM_DEBUG(1, "not Skip program for atv pal mode at lock proc std[%x]pal[%llx]mode[%d]", (unsigned int) para.u.analog.std, V4L2_COLOR_STD_PAL, mode);
 			}
 			if (((para.u.analog.std & V4L2_COLOR_STD_SECAM) == V4L2_COLOR_STD_SECAM) &&
 				(mode & AM_SCAN_DTV_STOREMODE_NOSECAM) == AM_SCAN_DTV_STOREMODE_NOSECAM)
@@ -5193,7 +5198,7 @@ static int am_scan_new_ts_locked_proc(AM_SCAN_Scanner_t *scanner)
 				AM_DEBUG(1, "Skip program for atv secam mode at lock proc");
 				goto next_ts;
 			} else {
-				AM_DEBUG(1, "not Skip program for atv secam mode at lock proc std[%x]pal[%x]mode[%d]", (unsigned int) para.u.analog.std, V4L2_COLOR_STD_PAL, mode);
+				AM_DEBUG(1, "not Skip program for atv secam mode at lock proc std[%x]pal[%llx]mode[%d]", (unsigned int) para.u.analog.std, V4L2_COLOR_STD_PAL, mode);
 			}
 
 			SIGNAL_EVENT(AM_SCAN_EVT_SIGNAL, (void*)&si);
@@ -5374,7 +5379,7 @@ static int am_scan_check_fend_evt(AM_SCAN_Scanner_t *scanner)
 
 	if (cur_fe_para.m_type == FE_ANALOG)
 	{
-		if (abs(dvb_fend_para(cur_fe_para)->frequency - freq) > atv_start_para.afc_range)
+		if (abs((int)(dvb_fend_para(cur_fe_para)->frequency - freq)) > atv_start_para.afc_range)
 		{
 			AM_DEBUG(1, "Analog frequency exceeds afc_range, expected/got:(%u/%u)",
 				dvb_fend_para(cur_fe_para)->frequency, freq);
@@ -5411,7 +5416,7 @@ static int am_scan_check_fend_evt(AM_SCAN_Scanner_t *scanner)
 	else
 	{
 		if (IS_ATSC_QAM_TS(cur_fe_para) ?
-			abs(dvb_fend_para(cur_fe_para)->frequency - freq) > 3000000 :
+			abs((int)(dvb_fend_para(cur_fe_para)->frequency - freq)) > 3000000 :
 			dvb_fend_para(cur_fe_para)->frequency != freq)
 		{
 			AM_DEBUG(1, "Unexpected fend_evt arrived, expected/got:(%u/%u)",

@@ -71,6 +71,8 @@ AM_DSC_Driver_t aml_dsc_drv =
 
 static AM_ErrorCode_t aml_open (AM_DSC_Device_t *dev, const AM_DSC_OpenPara_t *para)
 {
+	UNUSED(para);
+
 	int fd;
 	char buf[32];
 
@@ -88,6 +90,9 @@ static AM_ErrorCode_t aml_open (AM_DSC_Device_t *dev, const AM_DSC_OpenPara_t *p
 
 static AM_ErrorCode_t aml_alloc_chan (AM_DSC_Device_t *dev, AM_DSC_Channel_t *chan)
 {
+	UNUSED(dev);
+	UNUSED(chan);
+
 	// int fd;
 	// int ret = 0;
 	// ca_pid_t pi;
@@ -223,6 +228,8 @@ static AM_ErrorCode_t aml_set_source (AM_DSC_Device_t *dev, AM_DSC_Source_t src)
 }
 static AM_ErrorCode_t aml_set_mode (AM_DSC_Device_t *dev, AM_DSC_Channel_t *chan,int mode)
 {
+	UNUSED(dev);
+
 	chan->mode = mode;
 	return AM_SUCCESS;
 }

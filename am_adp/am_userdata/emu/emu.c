@@ -792,6 +792,7 @@ vesd_decode_block		(struct video_es_decoder *vd,
 				 unsigned int		min_bytes_valid,
 				 AM_Bool_t		data_lost)
 {
+	UNUSED(n_bytes);
 
 	/* The CEA 608-C and 708-C Close Caption data is encoded in
 	   picture user data fields. ISO 13818-2 requires the start
@@ -1004,6 +1005,7 @@ tsd_program			(emu_ud_drv_data_t *drv_data,
 				 unsigned int		pid,
 				 unsigned int		es_num)
 {
+	UNUSED(pid);
 	unsigned int adaptation_field_control;
 	unsigned int header_length;
 	unsigned int payload_length;
@@ -1250,6 +1252,7 @@ static void* dvr_data_thread(void *arg)
 
 static AM_ErrorCode_t emu_open(AM_USERDATA_Device_t *dev, const AM_USERDATA_OpenPara_t *para)
 {
+	UNUSED(para);
 	emu_ud_drv_data_t *drv_data = malloc(sizeof(emu_ud_drv_data_t));
 	
 	init_ts_decoder (&drv_data->tsd);

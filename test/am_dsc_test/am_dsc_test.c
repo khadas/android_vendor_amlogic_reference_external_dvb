@@ -48,6 +48,9 @@
 
 int main(int argc, char **argv)
 {
+	UNUSED(argc);
+	UNUSED(argv);
+
 	AM_AV_OpenPara_t av_para;
 	AM_DMX_OpenPara_t dmx_para;
 	AM_FEND_OpenPara_t fend_para;

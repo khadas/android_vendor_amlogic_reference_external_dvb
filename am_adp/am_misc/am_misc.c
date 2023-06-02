@@ -241,7 +241,7 @@ AM_ErrorCode_t AM_FileEcho(const char *name, const char *cmd)
 		am_init_syscontrol_api();
 		if (Write_Sysfs_ptr != NULL)
 		{
-			return Write_Sysfs_ptr(name,cmd);
+			return Write_Sysfs_ptr(name, (char *)cmd);
 		}
 	}
 
