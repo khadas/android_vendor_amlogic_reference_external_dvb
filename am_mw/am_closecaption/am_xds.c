@@ -2708,7 +2708,7 @@ static AM_ErrorCode_t xds_finish_comppkt1state(AM_XDSContext_t *context)
 				switch (temp)
 				{
 				case AM_XDSPROG_EDU:
-				case AM_XDSPROG_ENTERTAIEMENT:
+				case AM_XDSPROG_ENTERTAINMENT:
 				case AM_XDSPROG_MOVIE:
 				case AM_XDSPROG_NEWS:
 				case AM_XDSPROG_RELIGIOUS:
