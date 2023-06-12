@@ -170,7 +170,7 @@ static void tt2_add_cached_page(AM_TT2_Parser_t *parser, vbi_page *vp, int page_
 	target->page_type = page_type;
 	if (vp->drcs_clut) {
 		memcpy(target->drcs_clut, vp->drcs_clut, sizeof(target->drcs_clut));
-		target->page.drcs_clut = &target->drcs_clut;
+		target->page.drcs_clut = (uint8_t *)&target->drcs_clut;
 	}
 
 	target->pts = tt2_get_pts("/sys/class/stb/video_pts", 10);

@@ -67,7 +67,7 @@ static AM_Bool_t read_more(AM_VBI_Slice_Stream_t * st)
         uint8_t *s;
         uint8_t *e;
 
-        s = /* const cast */ st->end;
+        s = /* const cast */ (uint8_t *)st->end;
         e = st->buffer + sizeof (st->buffer);
         AM_DEBUG(1,"111read_more %d \n",sizeof (st->buffer));
         if (s >= e)
@@ -153,6 +153,7 @@ AM_VBI_Slice_Stream_t* vbi_slice_read_stream(const char *  fbuffer,
                                AM_VBI_SLICE_CALLBACK_FN * callback ,
                                void  *userdata)
 {
+        UNUSED(ts_pid);
         AM_VBI_Slice_Stream_t *st;
 
         st = calloc (1, sizeof (*st));
@@ -173,7 +174,7 @@ AM_VBI_Slice_Stream_t* vbi_slice_read_stream(const char *  fbuffer,
         st->end  = st->buffer + length;
         st->userdata    = userdata;
 
-        AM_DEBUG(1,"st->bp,st->end,length === 0x%x  0x%x   %d",st->bp,st->end,length);
+        AM_DEBUG(1,"st->bp,st->end,length === %p  %p   %d",st->bp,st->end,length);
         
 	return st;
 }
@@ -325,6 +326,9 @@ AM_Bool_t decode_frame(const AM_VBI_Sliced_t *     s,
              	     int64_t	stream_time,
                      void  *userdata)
 {
+        UNUSED(sample_time);
+        UNUSED(stream_time);
+        UNUSED(userdata);
         
         static double metronome = 0.0;
         static double last_sample_time = 0.0;
@@ -405,6 +409,9 @@ AM_Bool_t decode_frame(const AM_VBI_Sliced_t *     s,
 
 AM_Bool_t  AM_NTSC_VBI_Decoder_Test(int dev_no, int fid, const uint8_t *data, int len, void *user_data)
 {
+    UNUSED(dev_no);
+    UNUSED(fid);
+    UNUSED(user_data);
      int length =  len;
      AM_VBI_Slice_Stream_t *st;
     int idx = 0;

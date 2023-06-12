@@ -191,7 +191,7 @@ static inline AM_ErrorCode_t get_ci(AM_CI_Handle_t handle, _ci_t **pci)
 static inline AM_ErrorCode_t get_ci_new(int dev_no, int slot, _ci_t **pci)
 {
 	AM_ErrorCode_t err;
-	_ci_t *ci, *ci_tmp=NULL;
+	_ci_t *ci_tmp=NULL;
 	int i;
 
 	assert(pci);
@@ -207,7 +207,7 @@ static inline AM_ErrorCode_t get_ci_new(int dev_no, int slot, _ci_t **pci)
 			&& (gci.cis[i].dev_id == dev_no)
 			&& (gci.cis[i].slot_no == slot))
 		{
-			*pci = ci;
+			*pci = &gci.cis[i];
 			pthread_mutex_unlock(&gci.lock);
 			return AM_SUCCESS;
 		}
@@ -333,6 +333,11 @@ static int ci_ca_pmt_relay_callback(void *arg, uint8_t slot_id, uint16_t session
 							struct en50221_app_pmt_reply *reply,
 						  uint32_t reply_size)
 {
+	UNUSED(arg);
+	UNUSED(slot_id);
+	UNUSED(session_number);
+	UNUSED(reply_size);
+
 		if (reply == NULL) {
 			AM_DEBUG(1, "pmt relay pro:---");
 		} else {

@@ -900,7 +900,7 @@ static int AM_SEC_CanBlindScanOrTune(int dev_no, const AM_FENDCTRL_DVBFrontendPa
 	{
 		int lof = para->para.frequency > lnb_param.m_lof_threshold ?
 			lnb_param.m_lof_hi : lnb_param.m_lof_lo;
-		int tuner_freq = abs(para->para.frequency - lof);
+		int tuner_freq = abs((int)(para->para.frequency - lof));
 		if (tuner_freq < M_CENTRE_START_FREQ || tuner_freq > M_CENTRE_END_FREQ)
 		{
 			ret = 0;
@@ -1076,8 +1076,8 @@ static AM_ErrorCode_t AM_SEC_Prepare(int dev_no, const AM_FENDCTRL_DVBFrontendPa
 			if(!is_unicable)
 			{
 				// calc Frequency
-				int local= abs(para->para.frequency
-					- lof);
+				int local= abs((int)(para->para.frequency
+					- lof));
 				convert_para.frequency = ((((local * 2) / 125) + 1) / 2) * 125;
 				AM_DEBUG(1, " tp:%d lof:%d\n", para->para.frequency, lof);
 				AM_DEBUG(1, " local:%d freq:%d\n", local, convert_para.frequency);
@@ -1103,8 +1103,8 @@ static AM_ErrorCode_t AM_SEC_Prepare(int dev_no, const AM_FENDCTRL_DVBFrontendPa
 			}
 			else
 			{
-				int tmp1 = abs(para->para.frequency
-						-lof)
+				int tmp1 = abs((int)(para->para.frequency
+						-lof))
 						+ lnb_param.SatCRvco
 						- 1400000
 						+ lnb_param.guard_offset;
@@ -1896,7 +1896,7 @@ static AM_ErrorCode_t AM_SEC_Prepare(int dev_no, const AM_FENDCTRL_DVBFrontendPa
 			lof = lnb_param.m_lof_lo;
 		}
 		
-		int local= abs(para->para.frequency - lof);
+		int local= abs((int)(para->para.frequency - lof));
 		convert_para.frequency = ((((local * 2) / 125) + 1) / 2) * 125;
 
 		AM_FEND_SetPara(dev_no, &(convert_para));

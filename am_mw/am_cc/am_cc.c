@@ -799,7 +799,7 @@ static void *am_cc_data_thread(void *arg)
 			cc_data[2] == 0x39 &&
 			cc_data[3] == 0x34)
 		{
-			cc_pts = cc_buffer;
+			cc_pts = (uint32_t *)cc_buffer;
 			cc->decoder_cc_pts = *cc_pts;
 			AM_DEBUG(AM_DEBUG_LEVEL, "cc_data_thread mpeg cc_count %d pts %x", cc_data_cnt,*cc_pts);
 			//dump_cc_data(cc_data, cc_data_cnt);

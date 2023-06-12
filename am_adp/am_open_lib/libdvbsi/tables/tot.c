@@ -63,6 +63,7 @@ int dvbpsi_AttachTOT(dvbpsi_decoder_t * p_psi_decoder, uint8_t i_table_id,
                      uint16_t i_extension,
                      dvbpsi_tot_callback pf_callback, void* p_cb_data)
 {
+  (void)i_extension;
   dvbpsi_demux_t* p_demux = (dvbpsi_demux_t*)p_psi_decoder->p_private_decoder;
   dvbpsi_demux_subdec_t* p_subdec;
   dvbpsi_tot_decoder_t*  p_tot_decoder;
@@ -116,6 +117,7 @@ int dvbpsi_AttachTOT(dvbpsi_decoder_t * p_psi_decoder, uint8_t i_table_id,
 void dvbpsi_DetachTOT(dvbpsi_demux_t * p_demux, uint8_t i_table_id,
                       uint16_t i_extension)
 {
+  (void)i_extension;
   dvbpsi_demux_subdec_t* p_subdec;
   dvbpsi_demux_subdec_t** pp_prev_subdec;
 

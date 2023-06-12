@@ -19,6 +19,8 @@
 #define AM_DEBUG_LEVEL 5
 #define _LARGEFILE64_SOURCE
 
+#include <stdlib.h>
+
 #include <am_debug.h>
 #include <am_misc.h>
 #include <am_mem.h>
@@ -688,7 +690,7 @@ static void adec_pause_decode_cb(void *adec);
 static void adec_resume_decode_cb(void *adec);
 static void adec_get_status_cb(void *adec, AM_AV_AudioStatus_t *para);
 
-const AM_AUDIO_Driver_t callback_audio_drv =
+static AM_AUDIO_Driver_t callback_audio_drv =
 {
 .adec_start_decode = adec_start_decode_cb,
 .adec_pause_decode = adec_pause_decode_cb,
@@ -969,10 +971,13 @@ static void setup_forced_pid(AV_TSPlayPara_t *tp)
 
 static AM_ErrorCode_t adec_aout_open_cb(AM_AOUT_Device_t *dev, const AM_AOUT_OpenPara_t *para)
 {
+	UNUSED(dev);
+	UNUSED(para);
 	return 0;
 }
 static AM_ErrorCode_t adec_aout_set_volume_cb(AM_AOUT_Device_t *dev, int vol)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -989,6 +994,7 @@ static AM_ErrorCode_t adec_aout_set_volume_cb(AM_AOUT_Device_t *dev, int vol)
 }
 static AM_ErrorCode_t adec_aout_set_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mute)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1005,6 +1011,7 @@ static AM_ErrorCode_t adec_aout_set_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mut
 }
 static AM_ErrorCode_t adec_aout_set_output_mode_cb(AM_AOUT_Device_t *dev, AM_AOUT_OutputMode_t mode)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1020,10 +1027,12 @@ static AM_ErrorCode_t adec_aout_set_output_mode_cb(AM_AOUT_Device_t *dev, AM_AOU
 }
 static AM_ErrorCode_t adec_aout_close_cb(AM_AOUT_Device_t *dev)
 {
+	UNUSED(dev);
 	return 0;
 }
 static AM_ErrorCode_t adec_aout_set_pre_gain_cb(AM_AOUT_Device_t *dev, float gain)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1040,6 +1049,7 @@ static AM_ErrorCode_t adec_aout_set_pre_gain_cb(AM_AOUT_Device_t *dev, float gai
 }
 static AM_ErrorCode_t adec_aout_set_pre_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mute)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1057,6 +1067,7 @@ static AM_ErrorCode_t adec_aout_set_pre_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t
 
 static void adec_start_decode_cb(int fd, int fmt, int has_video, void **padec)
 {
+	UNUSED(fd);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1138,6 +1149,7 @@ static void adec_stop_decode_cb(void **padec)
 }
 static void adec_set_decode_ad_cb(int enable, int pid, int fmt, void *adec)
 {
+	UNUSED(enable);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d pid:%d,fmt:%d\n", __FUNCTION__,__LINE__,pid,fmt);
@@ -1159,6 +1171,7 @@ static void adec_set_decode_ad_cb(int enable, int pid, int fmt, void *adec)
 }
 static AM_ErrorCode_t adec_set_volume_cb(AM_AOUT_Device_t *dev, int vol)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1174,6 +1187,7 @@ static AM_ErrorCode_t adec_set_volume_cb(AM_AOUT_Device_t *dev, int vol)
 }
 static AM_ErrorCode_t adec_set_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mute)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1189,6 +1203,7 @@ static AM_ErrorCode_t adec_set_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mute)
 }
 static AM_ErrorCode_t adec_set_output_mode_cb(AM_AOUT_Device_t *dev, AM_AOUT_OutputMode_t mode)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1204,6 +1219,7 @@ static AM_ErrorCode_t adec_set_output_mode_cb(AM_AOUT_Device_t *dev, AM_AOUT_Out
 }
 static AM_ErrorCode_t adec_set_pre_gain_cb(AM_AOUT_Device_t *dev, float gain)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1219,6 +1235,7 @@ static AM_ErrorCode_t adec_set_pre_gain_cb(AM_AOUT_Device_t *dev, float gain)
 }
 static AM_ErrorCode_t adec_set_pre_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mute)
 {
+	UNUSED(dev);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1234,6 +1251,7 @@ static AM_ErrorCode_t adec_set_pre_mute_cb(AM_AOUT_Device_t *dev, AM_Bool_t mute
 }
 static void adec_get_status_cb(void *adec, AM_AV_AudioStatus_t *para)
 {
+	UNUSED(para);
 	AudioParms audio_parms;
 
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
@@ -1715,6 +1733,7 @@ static AM_ErrorCode_t amp_close(AM_AOUT_Device_t *dev)
 
 void afd_evt_callback(long dev_no, int event_type, void *param, void *user_data)
 {
+	UNUSED(dev_no);
 	UNUSED(user_data);
 
 	if (event_type == AM_USERDATA_EVT_AFD) {
@@ -1998,6 +2017,8 @@ int aml_set_tsync_enable(int enable)
 /**\brief 初始化JPEG解码器*/
 static AM_ErrorCode_t aml_init_jpeg(AV_JPEGData_t *jpeg)
 {
+	UNUSED(jpeg);
+
 // 	if (jpeg->dec_fd != -1)
 // 	{
 // 		close(jpeg->dec_fd);
@@ -2071,6 +2092,7 @@ static AV_JPEGData_t* aml_create_jpeg_data(void)
 /**\brief 释放JPEG解码相关数据*/
 static void aml_destroy_jpeg_data(AV_JPEGData_t *jpeg)
 {
+	UNUSED(jpeg);
 	// if (jpeg->dec_fd != -1)
 	// 	close(jpeg->dec_fd);
 	// if (jpeg->vbuf_fd != -1)
@@ -2402,8 +2424,8 @@ void aml_term_signal_handler(int signo)
 
 static char *cmd2string(int cmd)
 {
-	char buf[64];
-	char *string_cmd[] = {
+	static char buf[64];
+	static char *string_cmd[] = {
 	"play_start",        /*AV_PLAY_START*/
 	"play_pause",        /*AV_PLAY_PAUSE*/
 	"play_resume",       /*AV_PLAY_RESUME*/
@@ -2554,6 +2576,8 @@ static int aml_timeshift_get_trick_stat(AV_TimeshiftData_t *tshift)
 
 void tfile_evt_callback ( long dev_no, int event_type, void *param, void *user_data )
 {
+	UNUSED(dev_no);
+
 	if (event_type == AM_TFILE_EVT_RATE_CHANGED) {
 		AM_DEBUG(1, "tfile evt: rate[%dBps]", (int)param);
 		AV_TimeshiftData_t *tshift = (AV_TimeshiftData_t *)(((AM_AV_Device_t*)user_data)->timeshift_player.drv_data);
@@ -3376,7 +3400,7 @@ static int aml_timeshift_do_play_cmd(AV_TimeshiftData_t *tshift, AV_PlayCmdPara_
 			break;
 #endif
 		default:
-			AM_DEBUG(1, "[timeshift] Unsupported timeshift play command %d", cmd);
+			AM_DEBUG(1, "[timeshift] Unsupported timeshift play command %d", cmd->cmd);
 			return -1;
 			break;
 		}
@@ -4041,7 +4065,7 @@ wait_for_next_loop:
 	}
 
 	ioctl(tshift->ts.vid_fd, AMSTREAM_IOC_TRICKMODE, TRICKMODE_NONE);
-	AM_DEBUG(1, "set video black:%ll at exit timeshift", tshift->dev->video_blackout);
+	AM_DEBUG(1, "set video black:%d at exit timeshift", tshift->dev->video_blackout);
 	AM_FileEcho(VID_BLACKOUT_FILE, tshift->dev->video_blackout ? "1" : "0");
 	AM_DEBUG(1, "[timeshift] timeshift player thread exit end");
 	return NULL;
@@ -4179,7 +4203,8 @@ extern unsigned long CMEM_getPhys(unsigned long virts);
 /**\brief 解码JPEG数据*/
 static AM_ErrorCode_t aml_decode_jpeg(AV_JPEGData_t *jpeg, const uint8_t *data, int len, int mode, void *para)
 {
-	AM_ErrorCode_t ret = AM_SUCCESS;
+AM_ErrorCode_t ret = AM_SUCCESS;
+#if 0
 // #if !defined(ANDROID)
 // 	AV_JPEGDecodePara_t *dec_para = (AV_JPEGDecodePara_t *)para;
 // 	AV_JPEGDecState_t s;
@@ -4393,13 +4418,13 @@ static AM_ErrorCode_t aml_decode_jpeg(AV_JPEGData_t *jpeg, const uint8_t *data, 
 // 			AM_OSD_DestroySurface(surf);
 // 		}
 // 	}
-// #else
-// 	UNUSED(jpeg);
-// 	UNUSED(data);
-// 	UNUSED(len);
-// 	UNUSED(mode);
-// 	UNUSED(para);
-// #endif
+#else
+	UNUSED(jpeg);
+	UNUSED(data);
+	UNUSED(len);
+	UNUSED(mode);
+	UNUSED(para);
+#endif
 
 	return ret;
 }
@@ -4684,6 +4709,11 @@ static int aml_get_audio_digital_raw(void)
 
 static int aml_calc_sync_mode(AM_AV_Device_t *dev, int has_audio, int has_video, int has_pcr, int afmt, int *force_reason)
 {
+	UNUSED(dev);
+	UNUSED(has_audio);
+	UNUSED(has_video);
+	UNUSED(has_pcr);
+
 	int is_dts_dolby = 0;
 	int ac3_amaster = 0;
 	int is_digital_output = 0;
@@ -4721,6 +4751,8 @@ static int aml_calc_sync_mode(AM_AV_Device_t *dev, int has_audio, int has_video,
 
 static int aml_set_sync_mode(AM_AV_Device_t *dev, int mode)
 {
+	UNUSED(dev);
+
 	char mode_str[4];
 	int f_m = _get_tsync_mode_force();
 
@@ -5944,7 +5976,7 @@ static void* aml_av_monitor_thread(void *arg)
 #endif
 		if (!av_paused && dev->mode == AV_INJECT) {
 			if ((!has_video || (vbuf_level < DEC_STOP_VIDEO_LEVEL))
-			&& (!has_audio || adec_start && (abuf_level < DEC_STOP_AUDIO_LEVEL))) {
+			&& (!has_audio || (adec_start && (abuf_level < DEC_STOP_AUDIO_LEVEL)))) {
 				av_paused = AM_TRUE;
 				AM_DEBUG(1, "[avmon] av_paused, vbuf_level:%d, abuf_level:%d", vbuf_level, abuf_level);
 			}
@@ -6052,7 +6084,7 @@ static void* aml_av_monitor_thread(void *arg)
 			}
 		}
 
-		AM_TIME_GetClock(&cur_time);
+		AM_TIME_GetClock((int *)&cur_time);
 		if (need_replay && (dev->mode == AV_PLAY_TS) && (AM_ABS(cur_time - last_replay_time) > REPLAY_TIME_INTERVAL)) {
 			AM_DEBUG(1, "[avmon] replay ts vlevel %d alevel %d vpts_stop %d vmaster %d",
 				vbuf_level, abuf_level, vpts_stop_dur, vmaster_dur);
@@ -6083,7 +6115,7 @@ static void* aml_av_monitor_thread(void *arg)
 			vdec_stop_time = 0;
 			vdec_stop_dur  = 0;
 			has_amaster = AM_FALSE;
-			AM_TIME_GetClock(&last_replay_time);
+			AM_TIME_GetClock((int *)&last_replay_time);
 			replay_done = 1;
 		}else if (need_replay && (dev->mode == AV_TIMESHIFT) && (AM_ABS(cur_time - last_replay_time) > REPLAY_TIME_INTERVAL)) {
 			AM_DEBUG(1, "[avmon] replay timshift vlevel %d alevel %d vpts_stop %d vmaster %d",
@@ -6116,7 +6148,7 @@ static void* aml_av_monitor_thread(void *arg)
 			vdec_stop_time = 0;
 			vdec_stop_dur  = 0;
 			has_amaster = AM_FALSE;
-			AM_TIME_GetClock(&last_replay_time);
+			AM_TIME_GetClock((int *)&last_replay_time);
 			replay_done = 1;
 		}
 		else if (need_replay && (dev->mode == AV_INJECT) && (AM_ABS(cur_time - last_replay_time) > REPLAY_TIME_INTERVAL)) {
@@ -6153,7 +6185,7 @@ static void* aml_av_monitor_thread(void *arg)
 			vdec_stop_time = 0;
 			vdec_stop_dur  = 0;
 			has_amaster = AM_FALSE;
-			AM_TIME_GetClock(&last_replay_time);
+			AM_TIME_GetClock((int *)&last_replay_time);
 			replay_done = 1;
 		}
 
@@ -6622,6 +6654,10 @@ static AM_ErrorCode_t aml_file_cmd(AM_AV_Device_t *dev, AV_PlayCmd_t cmd, void *
 			return AM_AV_ERR_NOT_SUPPORTED;
 		break;
 	}
+#else
+	UNUSED(dev);
+	UNUSED(cmd);
+	UNUSED(para);
 #endif
 
 	return AM_SUCCESS;
@@ -6698,6 +6734,9 @@ static AM_ErrorCode_t aml_file_status(AM_AV_Device_t *dev, AM_AV_PlayStatus_t *s
 	}
 	status->duration = pinfo.full_time;
 	status->position = pinfo.current_time;
+#else
+	UNUSED(dev);
+	UNUSED(status);
 #endif
 	return AM_SUCCESS;
 }
@@ -6724,6 +6763,9 @@ static AM_ErrorCode_t aml_file_info(AM_AV_Device_t *dev, AM_AV_FileInfo_t *info)
 	}
 	info->duration = minfo.stream_info.duration;
 	info->size = minfo.stream_info.file_size;
+#else
+	UNUSED(dev);
+	UNUSED(info);
 #endif
 
 	return AM_SUCCESS;
@@ -6771,7 +6813,7 @@ static AM_ErrorCode_t aml_set_video_para(AM_AV_Device_t *dev, AV_VideoParaType_t
 		break;
 		case AV_VIDEO_PARA_BLACKOUT:
 			if (!(dev->mode & (AV_PLAY_TS | AV_TIMESHIFT))) {
-				AM_DEBUG(1, "set video black -----set [%d][%x]", (int)((long)val), (long)val);
+				AM_DEBUG(1, "set video black -----set [%d][%lx]", (int)((long)val), (long)val);
 				name = VID_BLACKOUT_FILE;
 				cmd = ((long)val)?"1":"0";
 				if (dev->b_play_start == AM_TRUE) {
@@ -7992,11 +8034,17 @@ static void ad_callback(const uint8_t * data,int len,void * user_data)
 	    printf("ad_callback [%d:%p] [user:%p]\n", len, data, user_data);
 	    audio_send_associate_data(user_data, (uint8_t *)data, len);
 	}
+#else
+	UNUSED(data);
+	UNUSED(len);
+	UNUSED(user_data);
 #endif
 }
 
 static AM_ErrorCode_t aml_set_ad_source(AM_AD_Handle_t *ad, int enable, int pid, int fmt, void *user)
 {
+	UNUSED(user);
+
 	AM_ErrorCode_t err = AM_SUCCESS;
 
 	UNUSED(fmt);
@@ -8185,6 +8233,8 @@ static int aml_restart_inject_mode(AM_AV_Device_t *dev, AM_Bool_t destroy_thread
 }
 static void aml_set_audio_cb(AM_AV_Device_t *dev,AM_AV_Audio_CB_t cb,void *user_data)
 {
+	UNUSED(dev);
+
 	AM_DEBUG(1, "%s %d", __FUNCTION__,__LINE__);
 
 	if (cb != NULL) {
@@ -8202,6 +8252,8 @@ static void aml_set_audio_cb(AM_AV_Device_t *dev,AM_AV_Audio_CB_t cb,void *user_
 
 static AM_ErrorCode_t aml_get_pts(AM_AV_Device_t *dev, int type, uint64_t *pts)
 {
+	UNUSED(dev);
+
 #define GAP_10SEC (90000*10)/*10s*/
 	char pts_buf[32];
 	const char *pts_file, *pts_bit32_file, *pts_tsync_file;
@@ -8234,9 +8286,9 @@ static AM_ErrorCode_t aml_get_pts(AM_AV_Device_t *dev, int type, uint64_t *pts)
 		memset(pts_buf, 0, sizeof(pts_buf));
 		if (AM_FileRead(pts_file, pts_buf, sizeof(pts_buf)) >= 0)
 			sscanf(pts_buf, "%d", &pts_dmx_2);
-	} while (retry-- && (abs(pts_dmx_2 - pts_dmx) > GAP_10SEC));
+	} while (retry-- && (abs((int)(pts_dmx_2 - pts_dmx)) > GAP_10SEC));
 
-	if ((abs(pts_dmx_2 - pts_dmx) > GAP_10SEC)) {
+	if ((abs((int)(pts_dmx_2 - pts_dmx)) > GAP_10SEC)) {
 		AM_DEBUG(1, "something wrong with the stream's pts");
 		*pts = 0L;
 		return AM_SUCCESS;
@@ -8247,7 +8299,7 @@ static AM_ErrorCode_t aml_get_pts(AM_AV_Device_t *dev, int type, uint64_t *pts)
 		sscanf(pts_buf, "%i", &pts_tsync);
 
 	*pts = pts_tsync;
-	if (pts_dmx_bit32 && (abs(pts_dmx_2 - pts_tsync) < (GAP_10SEC * 3)))
+	if (pts_dmx_bit32 && (abs((int)(pts_dmx_2 - pts_tsync)) < (GAP_10SEC * 3)))
 		*pts += 0x100000000L;
 
 	return AM_SUCCESS;
@@ -8255,9 +8307,11 @@ static AM_ErrorCode_t aml_get_pts(AM_AV_Device_t *dev, int type, uint64_t *pts)
 
 static AM_ErrorCode_t aml_set_fe_status(AM_AV_Device_t *dev, int value)
 {
-    AM_DEBUG(1,"aml_set_fe_status value = %d",value);
-    g_festatus = value;
-    return AM_SUCCESS;
+	UNUSED(dev);
+
+	AM_DEBUG(1,"aml_set_fe_status value = %d",value);
+	g_festatus = value;
+	return AM_SUCCESS;
 }
 
 AM_ErrorCode_t aml_get_timeout_real(int timeout, struct timespec *ts)

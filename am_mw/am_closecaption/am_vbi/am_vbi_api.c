@@ -230,6 +230,8 @@ static inline AM_ErrorCode_t vbi_wait_cb(AM_VBI_Device_t *dev)
 		while(dev->flags&VBI_FL_RUN_CB)
 			pthread_cond_wait(&dev->cond, &dev->lock);
 	}
+#else
+	UNUSED(dev);
 #endif
 	return AM_SUCCESS;
 }

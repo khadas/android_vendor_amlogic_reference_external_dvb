@@ -1268,8 +1268,8 @@ int AM_TFile_TimeSeek(AM_TFile_t tfile, int offset_ms/*offset from time start*/)
 		if (tfile->avail > 0)
 			pthread_cond_signal(&tfile->cond);
 
-		AM_DEBUG(3, "[tfile] >>timeseek: pstart: %p[time:%d offset:%d - %d]", pstart, pstart->time, pstart->start, pstart->end);
-		AM_DEBUG(3, "[tfile] >>timeseek: got block: next%p[time:%d offset:%d - %d]", p, p->time, p->start, p->end);
+		AM_DEBUG(3, "[tfile] >>timeseek: pstart: %p[time:%d offset:%lld - %lld]", pstart, pstart->time, pstart->start, pstart->end);
+		AM_DEBUG(3, "[tfile] >>timeseek: got block: next%p[time:%d offset:%lld - %lld]", p, p->time, p->start, p->end);
 		AM_DEBUG(3, "[tfile] >>timeseek: start %lld, read %lld, write %lld, avail %lld, total %lld",
 				tfile->start, tfile->read, tfile->write, tfile->avail, tfile->total);
 		ret = 0;

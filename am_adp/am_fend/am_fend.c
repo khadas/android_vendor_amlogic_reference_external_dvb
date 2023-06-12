@@ -534,7 +534,7 @@ static void* fend_blindscan_thread(void *arg)
 	return NULL;
 }
 
-static void sighand(int signo) {}
+static void sighand(int signo) {UNUSED(signo);}
 
 /****************************************************************************
  * API functions

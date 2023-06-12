@@ -590,6 +590,8 @@ static void am_korea_show_caption()
  *===============================================================*/
 static void am_ntsc_show_caption(int show_flag)
 {
+	UNUSED(show_flag);
+
 	int idx = 0;
 
 	memset(cc_cmds, 0, sizeof(cc_cmds));
@@ -1700,6 +1702,7 @@ void am_parse_atsc_cc_data_handle(int data1, int data2)
  *==============================================================*/
 void am_init_dtvcc_varible(int flag)
 {
+	UNUSED(flag);
 	memset(&am_dtvcc_handle, 0, sizeof(am_dtvcc_handle));
 	CC_DECODE_DBG("@@@@@@@@ set the sequence number to -1 @@@@@@@@\n");
 	am_dtvcc_handle.next_sequence_number = -1;
@@ -1830,6 +1833,7 @@ void am_process_dtvcc(struct am_dtvcc_decoder *am_cc_decoder)
  *===============================================================*/
 void AM_Parse_ATSC_CC_Data(char *buffer, int frequency)
 {
+	UNUSED(frequency);
 	int process_cc_data_flag, additional_data_flag, cc_count;
 	int idx = 0, unicode_data = 0;
 	int cc_valid, cc_type, cc_data_1, cc_data_2, dtvcc_cnt = 0;

@@ -1231,16 +1231,16 @@ AM_ErrorCode_t AM_REC_GetMediaInfoFromFile(const char *file_path, AM_REC_MediaIn
 
 	memset(file_iterator, 0, sizeof(file_iterator));
 	for (i = 2;;i++){
-		sprintf(file_iterator, "%s.%d", file_path, i);
-		ret = stat(file_iterator, &statbuff);
+		sprintf((char *)file_iterator, "%s.%d", file_path, i);
+		ret = stat((char *)file_iterator, &statbuff);
 		if (ret && errno == ENOENT) {
 			break;
 		}
 	};
 	if (i - 1 >= 2) {
 		close(fd);
-		sprintf(file_iterator, "%s.%d", file_path, i-1);
-		fd = open(file_iterator, O_RDONLY, 0666);
+		sprintf((char *)file_iterator, "%s.%d", file_path, i-1);
+		fd = open((char *)file_iterator, O_RDONLY, 0666);
 		if (fd < 0) {
 			AM_DEBUG(0, "Cannot open file '%s'", file_iterator);
 			return AM_REC_ERR_INVALID_PARAM;

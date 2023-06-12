@@ -11,7 +11,7 @@
 #undef _FORTIFY_SOURCE
 #endif
 /***************************************************************************
-/**\file
+ * \file
  * \brief Audio description模块
  *
  * \author Gong Ke <ke.gong@amlogic.com>

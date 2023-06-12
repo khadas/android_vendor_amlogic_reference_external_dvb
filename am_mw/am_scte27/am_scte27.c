@@ -441,6 +441,7 @@ static void generate_bitmap(AM_SCTE27_Parser_t *parser, scte_simple_bitmap_t *si
 
 static void decode_bitmap(AM_SCTE27_Parser_t *parser, scte_subtitle_t *sub_info, uint8_t* buffer, int size)
 {
+	UNUSED(size);
 	/*uint32_t frame_time;
 	char frame_rate_buf[256];
 	int vframe_rate = 0;
@@ -875,7 +876,7 @@ int decode_message_body(AM_SCTE27_Parser_t *parser, const uint8_t *buf, int size
 		return -1;
 	}
 
-	bitmap = &buf[12];
+	bitmap = (uint8_t *)&buf[12];
 	AM_FileRead("/sys/class/video/frame_height", read_buff, sizeof(read_buff));
 	video_height = strtoul(read_buff, NULL, 10);
 	AM_FileRead("/sys/class/video/frame_width", read_buff, sizeof(read_buff));

@@ -44,7 +44,7 @@ void am_first_action(void)
 		setenv("ICU_DATA", "/vendor/usr/icu", 1);
 		u_setDataDirectory("/vendor/usr/icu");
 		long status = 0;
-		u_init(&status);
+		u_init((UErrorCode *)&status);
 		if (status > 0)
 			AM_DEBUG(1, "icu init fail. [%ld]", status);
 		actionFlag = true;

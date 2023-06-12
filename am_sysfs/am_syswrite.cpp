@@ -31,6 +31,7 @@ class DeathNotifier: public IBinder::DeathRecipient
         }
         void binderDied(const wp < IBinder > &who)
         {
+            UNUSED(who);
             AM_DEBUG(1, "system_write died !");
         }
 };

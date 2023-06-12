@@ -1007,8 +1007,8 @@ int query_video_status(int type, int *value);
 void set_trickmode_I_frame(u32 trickmode);
 u32 get_post_canvas(void);
 #else
-static inline void set_vsync_pts_inc_mode(int inc) { return; }
-static inline void set_trickmode_I_frame(u32 trickmode) { return; }
+static inline void set_vsync_pts_inc_mode(int inc) { (void)inc; return; }
+static inline void set_trickmode_I_frame(u32 trickmode) { (void)trickmode; return; }
 #endif
 
 #endif /* AMSTREAM_H */

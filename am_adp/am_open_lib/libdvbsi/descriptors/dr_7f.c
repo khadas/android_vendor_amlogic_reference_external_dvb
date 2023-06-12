@@ -69,6 +69,7 @@ int dvbpsi_Decode_Exten_Sup_Audio_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t 
  *****************************************************************************/
 int dvbpsi_Decode_Exten_AC4_Audio_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
 {
+	UNUSED(i_length);
 	AM_DEBUG(1, "dr_7f dvbpsi_Decode_Exten_AC4_Audio_Dr ");
 	/*1 5 1 1 8bit mix:1 edit:5 re:1 lang:1*/
 	p_decoded->exten_t.ac4_audio.ac4_config_flag = p_data[1]; /*1000 0000*/
@@ -81,6 +82,7 @@ int dvbpsi_Decode_Exten_AC4_Audio_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t 
  *****************************************************************************/
 int dvbpsi_Decode_Exten_Audio_Preselection_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * p_data, uint8_t i_length)
 {
+	UNUSED(i_length);
 	AM_DEBUG(1, "dr_7f dvbpsi_Decode_Exten_Audio_Preselection_Dr ");
 	dvbpsi_EXTENSION_audio_preselection_t* ap = &p_decoded->exten_t.audio_preselection;
 	ap->num_preselections = (p_data[1]&0xF8)>>3; /*1111 1000*/
@@ -112,7 +114,7 @@ int dvbpsi_Decode_Exten_Audio_Preselection_Dr(dvbpsi_EXTENSION_dr_t * p_decoded,
 		ps_i->future_extension = (data[1]&0x01);
 		if (ps_i->language_code_present)
 		{
-			strncpy(ps_i->iso_639_language_code,data+2,3);
+			strncpy((char *)ps_i->iso_639_language_code,(char *)data+2,3);
 			extra+=3;
 		}
 		ps_i->message_id=0;
@@ -148,10 +150,10 @@ int dvbpsi_Decode_Exten_Message_Dr(dvbpsi_EXTENSION_dr_t * p_decoded, uint8_t * 
 	AM_DEBUG(1, "dr_7f %s", __func__);
 	dvbpsi_EXTENSION_message_t* ap = &p_decoded->exten_t.message;
 	ap->message_id = p_data[1];
-	strncpy(ap->iso_639_language_code,p_data+2,3);
+	strncpy((char *)ap->iso_639_language_code,(char *)p_data+2,3);
 	int text_len = i_length-5;
 	memset(ap->text,0,sizeof(ap->text));
-	strncpy(ap->text,p_data+5,text_len);
+	strncpy((char *)ap->text,(char *)p_data+5,text_len);
 	uint8_t* lang = ap->iso_639_language_code;
 	AM_DEBUG(1, "dr_7f %s, msg_id:%d, lang:%c%c%c, text:%s.", __func__,
 			ap->message_id,lang[0],lang[1],lang[2],ap->text);

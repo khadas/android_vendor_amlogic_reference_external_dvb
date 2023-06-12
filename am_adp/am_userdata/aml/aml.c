@@ -38,7 +38,7 @@
 #define IS_H264(p)	((p[0] == 0xb5 && p[3] == 0x47 && p[4] == 0x41 && p[5] == 0x39 && p[6] == 0x34))
 #define IS_DIRECTV(p) ((p[0] == 0xb5 && p[1] == 0x00 && p[2] == 0x2f))
 #define IS_AVS(p)	 ((p[0] == 0x47) && (p[1] == 0x41) && (p[2] == 0x39) && (p[3] == 0x34))
-#define IS_ATSC(p)	((p[0] == 0x47) && (p[1] == 0x41) && (p[2] == 0x39) && (p[3] == 0x34) && (p[4] == 0x3))
+#define IS_ATSC(p)	((p[0] == 0x47) && (p[1] == 0x41) && (p[2] == 0x39) && (p[3] == 0x34)/* && (p[4] == 0x3)*/)
 #define IS_SCTE(p)  ((p[0]==0x3) && ((p[1]&0x7f) == 1))
 
 #define IS_AFD(p)	((p[0] == 0x44) && (p[1] == 0x54) && (p[2] == 0x47) && (p[3] == 0x31))
@@ -359,7 +359,7 @@ static void aml_write_userdata(AM_USERDATA_Device_t *dev, uint8_t *buffer, int b
 	if (pts_valid == 0)
 		pts = ud->curr_pts + ud->curr_duration;
 
-	pts_in_buffer = userdata_with_pts;
+	pts_in_buffer = (uint32_t *)userdata_with_pts;
 	*pts_in_buffer = pts;
 	memcpy(userdata_with_pts+4, buffer, buffer_len);
 
@@ -738,6 +738,7 @@ static int aml_process_mpeg_userdata(AM_USERDATA_Device_t *dev, uint8_t *data, i
 static void aml_h264_userdata_package(AM_USERDATA_Device_t *dev, int poc, int type, uint8_t *p, int len, uint32_t
 	pts, int pts_valid, uint32_t duration)
 {
+	UNUSED(type);
 	AM_UDDrvData *ud = dev->drv_data;
 	AM_CCData *cc;
 
