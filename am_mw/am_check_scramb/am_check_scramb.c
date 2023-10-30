@@ -137,7 +137,8 @@ static void *am_check_scramble_thread(void* arg)
 	sprintf(buf_mode, "/sys/class/stb/dvr%d_mode", obj->id);
 	AM_FileEcho(buf_mode, "ts");
 	AM_DVR_SetSource(obj->id, obj->fifo_id);
-	AM_DMX_SetSource(obj->dmx_id, obj->dmx_src);
+	//don't set demux source, it's fixed, it cause conflicts.
+	//AM_DMX_SetSource(obj->dmx_id, obj->dmx_src);
 	memset(&spara, 0, sizeof(spara));
 	spara.pids[0] = 1;
 	spara.pid_count = 1;
