@@ -183,9 +183,11 @@ int am_scan_vct_timeout = 2500;
 #define IS_ATSC_QAM_TS(_para) (IS_ATSC_TS(_para) && \
 	(_para.atsc.para.u.vsb.modulation==QAM_256 || \
 	_para.atsc.para.u.vsb.modulation==QAM_64))
-#define IS_DVBT2() IS_DVBT2_TS(scanner->start_freqs[scanner->curr_freq].fe_para)
-#define IS_ISDBT() IS_ISDBT_TS(scanner->start_freqs[scanner->curr_freq].fe_para)
-#define IS_ATSC_QAM256() IS_ATSC_QAM256_TS(scanner->start_freqs[scanner->curr_freq].fe_para)
+
+#define VALID_IDX(_idx_) ((_idx_) >= 0)
+#define IS_DVBT2() (VALID_IDX(scanner->curr_freq) && IS_DVBT2_TS(scanner->start_freqs[scanner->curr_freq].fe_para))
+#define IS_ISDBT() (VALID_IDX(scanner->curr_freq) && IS_ISDBT_TS(scanner->start_freqs[scanner->curr_freq].fe_para))
+#define IS_ATSC_QAM256() (VALID_IDX(scanner->curr_freq) && IS_ATSC_QAM256_TS(scanner->start_freqs[scanner->curr_freq].fe_para))
 
 #define cur_fe_para		scanner->start_freqs[scanner->curr_freq].fe_para
 #define dtv_start_para		scanner->start_para.dtv_para
