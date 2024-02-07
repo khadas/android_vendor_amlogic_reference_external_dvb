@@ -1134,7 +1134,7 @@ iso6937_end:
     return -1;
 }
 
-static void si_add_audio(AM_SI_AudioInfo_t *ai, int aud_pid, int aud_fmt, char lang[3],int audio_type,int audio_exten, int presel_id, int msg_id)
+static void si_add_audio(AM_SI_AudioInfo_t *ai, int aud_pid, int aud_fmt, char lang[3],int audio_type,int audio_exten, int presel_id, int msg_id, AM_Bool_t update)
 {
 	int i, j;
 	int i_exten = 0, sub_id;
@@ -1146,7 +1146,7 @@ static void si_add_audio(AM_SI_AudioInfo_t *ai, int aud_pid, int aud_fmt, char l
 	{
 		if (ai->audios[i].pid == aud_pid &&
 			ai->audios[i].fmt == aud_fmt &&
-			((! memcmp(ai->audios[i].lang, lang, 3) && ai->audios[i].presel_id == presel_id)
+			(((update || !memcmp(ai->audios[i].lang, lang, 3)) && ai->audios[i].presel_id == presel_id)
 			|| (ai->audios[i].presel_id != -1 && presel_id == -1))
 			)
 		{
@@ -2119,7 +2119,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
 						int id = ps->preselection_id;
 						int msg_id = (ps->text_label_present ? ps->message_id : -1);
 						si_add_audio(aud_info, es->i_pid, afmt_tmp, (char *)ps->iso_639_language_code,
-								audio_type, audio_exten, id, msg_id);
+								audio_type, audio_exten, id, msg_id, AM_FALSE);
 					}
 				}
 			}
@@ -2157,7 +2157,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
 			}
 		AM_SI_LIST_END()
 		/* Add a audio */
-		si_add_audio(aud_info, es->i_pid, afmt_tmp, lang_tmp, audio_type, audio_exten, -1,-1);
+		si_add_audio(aud_info, es->i_pid, afmt_tmp, lang_tmp, audio_type, audio_exten, -1,-1, AM_FALSE);
 	}
 
 	return AM_SUCCESS;
@@ -2215,7 +2215,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromATSCVC(vct_channel_info_t *vcinfo, int *vid, i
 				{
 					memcpy(lang_tmp, asld->elem[i].iso_639_code, sizeof(lang_tmp));
 					audio_type = asld->elem[i].i_audio_type;
-					si_add_audio(aud_info, asld->elem[i].i_pid, afmt_tmp, lang_tmp,audio_type,audio_exten,-1,-1);
+					si_add_audio(aud_info, asld->elem[i].i_pid, afmt_tmp, lang_tmp,audio_type,audio_exten,-1,-1, AM_TRUE);
 				}
 			}
 		}
@@ -2266,7 +2266,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromVC(dvbpsi_atsc_vct_channel_t *vcinfo, int *vid
 				if (afmt_tmp != -1)
 				{
 					memcpy(lang_tmp, asld->elements[i].i_iso_639_code, sizeof(lang_tmp));
-					si_add_audio(aud_info, asld->elements[i].i_elementary_pid, afmt_tmp, lang_tmp,audio_type,audio_exten,-1,-1);
+					si_add_audio(aud_info, asld->elements[i].i_elementary_pid, afmt_tmp, lang_tmp,audio_type,audio_exten,-1,-1, AM_TRUE);
 				}
 			}
 		}
