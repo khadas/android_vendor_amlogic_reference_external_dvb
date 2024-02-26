@@ -342,6 +342,7 @@ static AM_ErrorCode_t si_decode_tot(void **p_table, dvbpsi_psi_section_t *p_sect
 	return AM_SUCCESS;
 }
 
+#ifndef DISABLE_ATSC
 static AM_ErrorCode_t si_decode_atsc_mgt(void **p_table, dvbpsi_psi_section_t *p_section)
 {
 	dvbpsi_atsc_mgt_t *p_mgt;
@@ -532,7 +533,7 @@ static AM_ErrorCode_t si_decode_atsc_ett(void **p_table, dvbpsi_psi_section_t *p
 
 	return AM_SUCCESS;
 }
-
+#endif
 
 /**\brief 检查句柄是否有效*/
 static AM_INLINE AM_ErrorCode_t si_check_handle(AM_SI_Handle_t handle)
@@ -674,11 +675,13 @@ void si_decode_descriptor_ex(dvbpsi_descriptor_t *descr, SI_Descriptor_Flag_t fl
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_AC3, 			dvbpsi_DecodeAC3Dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_ENHANCED_AC3, 	dvbpsi_DecodeENAC3Dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_AAC,			dvbpsi_DecodeAACDr)
+#ifndef DISABLE_ATSC
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_PSIPENHANCED_AC3, 	dvbpsi_DecodePSIPENAC3Dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_PSIP_AUDIOSTREAM_AC3, 	dvbpsi_decode_atsc_ac3_audio_dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_EXTENSION, 	dvbpsi_DecodeEXTENSIONDr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_CAPTION_SERVICE,  dvbpsi_decode_atsc_caption_service_dr)
 		SI_ADD_DESCR_DECODE_FUNC(AM_SI_DESCR_SERVICE_LOCATION, dvbpsi_decode_atsc_service_location_dr)
+#endif
 		default:
 			break;
 	}
@@ -688,10 +691,12 @@ void si_decode_descriptor_ex(dvbpsi_descriptor_t *descr, SI_Descriptor_Flag_t fl
 		//AM_DEBUG(1, "PMT [%x][%x][%x]", flag, SI_DESCR_87_LCN, SI_DESCR_87_CA);
 		if ((flag & SI_DESCR_87_LCN) == SI_DESCR_87_LCN)
 			dvbpsi_DecodeLogicalChannelNumber87Dr(descr);
+#ifndef DISABLE_ATSC
 		else if ((flag & SI_DESCR_87_CA) == SI_DESCR_87_CA)
 			dvbpsi_decode_atsc_content_advisory_dr(descr);
 		else
 			dvbpsi_decode_atsc_content_advisory_dr(descr);
+#endif
 		} break;
 	default:
 		break;
@@ -1263,12 +1268,13 @@ AM_ErrorCode_t AM_SI_Create(AM_SI_Handle_t *handle)
 	SET_DECODE_DESCRIPTOR_CALLBACK(eit, si_decode_descriptor, 0);
 	SET_DECODE_DESCRIPTOR_CALLBACK(tot, si_decode_descriptor, 0);
 	SET_DECODE_DESCRIPTOR_CALLBACK(bat, si_decode_descriptor, 0);
+#ifndef DISABLE_ATSC
 	SET_DECODE_DESCRIPTOR_CALLBACK(atsc_mgt, si_decode_descriptor, 0);
 	SET_DECODE_DESCRIPTOR_CALLBACK(atsc_vct, si_decode_descriptor, 0);
 	SET_DECODE_DESCRIPTOR_CALLBACK(atsc_stt, si_decode_descriptor, 0);
 	SET_DECODE_DESCRIPTOR_CALLBACK(atsc_eit, si_decode_descriptor, 0);
 	SET_DECODE_DESCRIPTOR_CALLBACK(atsc_ett, si_decode_descriptor, 0);
-
+#endif
 	dec->prv_data = (void*)si_prv_data;
 	dec->allocated = AM_TRUE;
 
@@ -1388,6 +1394,7 @@ AM_ErrorCode_t AM_SI_DecodeSection(AM_SI_Handle_t handle, uint16_t pid, uint8_t 
 			else
 				ret = si_decode_tot(sec, psi_sec);
 			break;
+#ifndef DISABLE_ATSC
 		case AM_SI_TID_PSIP_MGT:
 			if (pid != AM_SI_ATSC_BASE_PID)
 				ret = AM_SI_ERR_NOT_SUPPORTED;
@@ -1423,6 +1430,7 @@ AM_ErrorCode_t AM_SI_DecodeSection(AM_SI_Handle_t handle, uint16_t pid, uint8_t 
 		    AM_DEBUG(1, "CEA PSI DECODE");
 			ret = si_decode_atsc_cea(sec, psi_sec);
 			break;
+#endif
 		default:
 			ret = AM_SI_ERR_NOT_SUPPORTED;
 			break;
@@ -1484,6 +1492,7 @@ AM_ErrorCode_t AM_SI_ReleaseSection(AM_SI_Handle_t handle, uint8_t table_id, voi
 		case AM_SI_TID_TDT:
 			dvbpsi_DeleteTOT((dvbpsi_tot_t*)sec);
 			break;
+#ifndef DISABLE_ATSC
 		case AM_SI_TID_PSIP_MGT:
 			dvbpsi_atsc_DeleteMGT((dvbpsi_atsc_mgt_t*)sec);
 			break;
@@ -1506,6 +1515,7 @@ AM_ErrorCode_t AM_SI_ReleaseSection(AM_SI_Handle_t handle, uint8_t table_id, voi
 		case AM_SI_TID_PSIP_CEA:
 			dvbpsi_atsc_DeleteCEA((dvbpsi_atsc_cea_t*)sec);
 			break;
+#endif
 		default:
 			ret = AM_SI_ERR_INVALID_SECTION_DATA;
 	}
@@ -2173,6 +2183,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromES(dvbpsi_pmt_es_t *es, int *vid, int *vfmt, A
  */
 AM_ErrorCode_t AM_SI_ExtractAVFromATSCVC(vct_channel_info_t *vcinfo, int *vid, int *vfmt, AM_SI_AudioInfo_t *aud_info)
 {
+#ifndef DISABLE_ATSC
 	char lang_tmp[3];
 	int	audio_type=0;
 	int audio_exten = 0;
@@ -2219,12 +2230,13 @@ AM_ErrorCode_t AM_SI_ExtractAVFromATSCVC(vct_channel_info_t *vcinfo, int *vid, i
 			}
 		}
 	AM_SI_LIST_END()
-
+#endif
 	return AM_SUCCESS;
 }
 
 AM_ErrorCode_t AM_SI_ExtractAVFromVC(dvbpsi_atsc_vct_channel_t *vcinfo, int *vid, int *vfmt, AM_SI_AudioInfo_t *aud_info)
 {
+#ifndef DISABLE_ATSC
 	char lang_tmp[3];
 	int audio_type=0;
 	int audio_exten = 0;
@@ -2270,7 +2282,7 @@ AM_ErrorCode_t AM_SI_ExtractAVFromVC(dvbpsi_atsc_vct_channel_t *vcinfo, int *vid
 			}
 		}
 	AM_SI_LIST_END()
-
+#endif
 	return AM_SUCCESS;
 }
 
@@ -2494,7 +2506,7 @@ AM_ErrorCode_t AM_SI_ExtractDVBIsdbsubtitleFromES(dvbpsi_pmt_es_t *es, AM_SI_Isd
 	return AM_SUCCESS;
 }
 
-
+#ifndef DISABLE_ATSC
 AM_ErrorCode_t AM_SI_ExtractATSCCaptionFromES(dvbpsi_pmt_es_t *es, AM_SI_CaptionInfo_t *cap_info)
 {
 	dvbpsi_descriptor_t *descr;
@@ -2553,7 +2565,6 @@ AM_ErrorCode_t AM_SI_ExtractATSCCaptionFromES(dvbpsi_pmt_es_t *es, AM_SI_Caption
 			}
 		}
 	AM_SI_LIST_END()
-
 	return AM_SUCCESS;
 }
 
@@ -2610,7 +2621,6 @@ AM_ErrorCode_t AM_SI_GetRatingString(dvbpsi_atsc_content_advisory_dr_t *pcad, ch
 		snprintf(buf, buf_size, "%s}", buf);
 	}
 	snprintf(buf, buf_size, "%s]", buf);
-
 	return AM_SUCCESS;
 }
 
@@ -2665,7 +2675,6 @@ AM_ErrorCode_t AM_SI_GetRatingStringFromDescriptors(dvbpsi_descriptor_t *p_descr
 			return AM_SUCCESS;
 		}
 	AM_SI_LIST_END()
-
 	return AM_SUCCESS;
 }
 
@@ -2683,7 +2692,6 @@ AM_ErrorCode_t AM_SI_GetATSCCaptionStringFromDescriptors(dvbpsi_descriptor_t *p_
 			return AM_SUCCESS;
 		}
 	AM_SI_LIST_END()
-
 	return AM_SUCCESS;
 }
-
+#endif

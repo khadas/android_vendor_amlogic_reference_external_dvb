@@ -93,6 +93,24 @@ func am_mw_defaults() (android.Module) {
             //fmt.Println("misc defaults added")
         }
 
+        if (strings.Contains(adtv_config, "disable_atsc")) {
+            fmt.Println("atsc disabled in am_mw")
+            p.Cflags = append(p.Cflags, "-DDISABLE_ATSC")
+            atsc_srcs := []string{
+                "am_si/atsc/atsc_rrt.c",
+                "am_si/atsc/atsc_vct.c",
+                "am_si/atsc/atsc_mgt.c",
+                "am_si/atsc/atsc_stt.c",
+                "am_si/atsc/atsc_eit.c",
+                "am_si/atsc/atsc_ett.c",
+                "am_si/atsc/atsc_descriptor.c",
+                "am_si/atsc/huffman_decode.c",
+            }
+            p.Exclude_srcs = append(p.Exclude_srcs, atsc_srcs...)
+
+        } else {
+            //fmt.Println("atsc defaults added")
+        }
 
         ctx.AppendProperties(p)
     })

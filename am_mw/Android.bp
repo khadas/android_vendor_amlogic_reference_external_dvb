@@ -127,13 +127,8 @@ cc_defaults {
     srcs: misc_srcs,
 }
 
-cc_defaults {
-    name: "am_mw_dtv_defaults",
-    srcs: [
-        "am_epg/am_epg.c",
-        "am_rec/am_rec.c",
-        "am_scan/am_scan.c",
-        "am_si/am_si.c",
+/*also used in go file, check carefully before change*/
+atsc_srcs = [
         "am_si/atsc/atsc_rrt.c",
         "am_si/atsc/atsc_vct.c",
         "am_si/atsc/atsc_mgt.c",
@@ -142,6 +137,20 @@ cc_defaults {
         "am_si/atsc/atsc_ett.c",
         "am_si/atsc/atsc_descriptor.c",
         "am_si/atsc/huffman_decode.c",
+    ]
+
+cc_defaults {
+    name: "am_mw_atsc_defaults",
+    srcs: atsc_srcs,
+}
+
+cc_defaults {
+    name: "am_mw_dtv_defaults",
+    srcs: [
+        "am_epg/am_epg.c",
+        "am_rec/am_rec.c",
+        "am_scan/am_scan.c",
+        "am_si/am_si.c",
         "am_fend_ctrl/am_sec.c",
         "am_fend_ctrl/am_fend_ctrl.c",
         "am_isdb/am_isdb.c",
@@ -166,6 +175,7 @@ cc_library_static {
         "am_mw_db_defaults",
         "am_mw_subtitle_defaults",
         "am_mw_misc_defaults",
+        "am_mw_atsc_defaults",
         "am_mw_defaults",
         "am_mw_lib_defaults",
     ],
@@ -195,6 +205,7 @@ cc_library_static {
         "-DDISABLE_LOCAL_DB",
         "-DDISABLE_SUBTITLE",
         "-DDISABLE_MISC",
+        "-DDISABLE_ATSC",
     ],
     vendor: true,
 }

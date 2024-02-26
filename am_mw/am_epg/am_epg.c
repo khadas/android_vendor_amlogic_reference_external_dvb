@@ -726,6 +726,7 @@ static void am_epg_proc_tot_section(AM_EPG_Monitor_t *mon, void *tot_section)
 	pthread_mutex_unlock(&time_lock);
 }
 
+#ifndef DISABLE_ATSC
 static void am_epg_proc_stt_section(AM_EPG_Monitor_t *mon, void *stt_section)
 {
 	dvbpsi_atsc_stt_t *p_stt = (dvbpsi_atsc_stt_t *)stt_section;
@@ -747,6 +748,7 @@ static void am_epg_proc_stt_section(AM_EPG_Monitor_t *mon, void *stt_section)
 	AM_TIME_GetClock(&curr_time.tdt_sys_time);
 	pthread_mutex_unlock(&time_lock);
 }
+#endif
 
 static void am_epg_gen_short_event_text(ShortEventLanguage *all_langs, int lang_cnt, 
 	char *evt_name, int name_len, char *short_descr, int descr_len)
@@ -2135,6 +2137,7 @@ handler_done:
 
 }
 
+#ifndef DISABLE_ATSC
 static void am_epg_section_handler_psip_eit_ett(int dev_no, int fid, const uint8_t *data, int len, void *user_data)
 {
 	AM_EPG_Monitor_t *mon = (AM_EPG_Monitor_t*)user_data;
@@ -2216,7 +2219,7 @@ handler_done:
 	pthread_mutex_unlock(&mon->lock);
 
 }
-
+#endif
 
 /**\brief 请求一个表的section数据*/
 static AM_ErrorCode_t am_epg_request_section(AM_EPG_Monitor_t *mon, AM_EPG_TableCtl_t *mcl)
@@ -2234,10 +2237,12 @@ static AM_ErrorCode_t am_epg_request_section(AM_EPG_Monitor_t *mon, AM_EPG_Table
 	/*分配过滤器*/
 	AM_TRY(AM_DMX_AllocateFilter(mon->dmx_dev, &mcl->fid));
 	/*设置处理函数*/
+#ifndef DISABLE_ATSC
 	if ((!strncmp(mcl->tname, "ATSC EIT", 8) && mcl->tid == AM_SI_TID_PSIP_EIT)
 			|| (!strncmp(mcl->tname, "ATSC ETT", 8) && mcl->tid == AM_SI_TID_PSIP_ETT))
 		AM_TRY(AM_DMX_SetCallback(mon->dmx_dev, mcl->fid, am_epg_section_handler_psip_eit_ett, (void*)mon));
 	else
+#endif
 		AM_TRY(AM_DMX_SetCallback(mon->dmx_dev, mcl->fid, am_epg_section_handler, (void*)mon));
 	
 	/*设置过滤器参数*/
@@ -2288,11 +2293,13 @@ static AM_ErrorCode_t am_epg_request_section(AM_EPG_Monitor_t *mon, AM_EPG_Table
 	}
 
 	AM_TRY(AM_DMX_SetSecFilter(mon->dmx_dev, mcl->fid, &param));
+#ifndef DISABLE_ATSC
 	if ((mcl->pid == AM_SI_PID_EIT && mcl->tid >= 0x50 && mcl->tid <= 0x6F)
 			|| ((!strncmp(mcl->tname, "ATSC EIT", 8) && mcl->tid == AM_SI_TID_PSIP_EIT)
 				|| (!strncmp(mcl->tname, "ATSC ETT", 8) && mcl->tid == AM_SI_TID_PSIP_ETT)))
 		AM_TRY(AM_DMX_SetBufferSize(mon->dmx_dev, mcl->fid, 256*1024));
 	else
+#endif
 		AM_TRY(AM_DMX_SetBufferSize(mon->dmx_dev, mcl->fid, 16*1024));
 	AM_TRY(AM_DMX_StartFilter(mon->dmx_dev, mcl->fid));
 
@@ -2790,6 +2797,7 @@ static void am_epg_proc_eit_section(AM_EPG_Monitor_t *mon, void *eit_section)
 		am_epg_proc_eit_section_def(mon, eit_section);
 }
 
+#ifndef DISABLE_ATSC
 static void am_epg_proc_rrt_section(AM_EPG_Monitor_t *mon, void *rrt_section)
 {
 	TAB_CB(mon, AM_EPG_TAB_RRT, rrt_section);
@@ -2837,9 +2845,11 @@ static void am_epg_proc_vct_section(AM_EPG_Monitor_t *mon, void *vct_section)
 	if (!mon->disable_def_proc)
 		am_epg_proc_vct_section_def(mon, vct_section);
 }
+#endif
 
 static void am_epg_proc_pmt_section(AM_EPG_Monitor_t *mon, void *pmt_section)
 {
+#ifndef DISABLE_ATSC
 	dvbpsi_pmt_t *p_pmt = (dvbpsi_pmt_t*)pmt_section;
 	int i_version = p_pmt->i_version;
 	dvbpsi_descriptor_t *descr;
@@ -2864,6 +2874,7 @@ static void am_epg_proc_pmt_section(AM_EPG_Monitor_t *mon, void *pmt_section)
 	/*触发通知事件*/
 	SIGNAL_EVENT(AM_EPG_EVT_PMT_RATING, (void*)(long)&pmt_rate);
 	AM_DEBUG(0, "PMT ver:%d i_program_number:%d rate:[%s]values_size:%d", i_version, i_program_number, pmt_rate.rating, values_size);
+#endif
 }
 /**\brief NIT搜索完毕处理*/
 static void am_epg_nit_done(AM_EPG_Monitor_t *mon)
@@ -3107,6 +3118,7 @@ static void am_epg_eit61_done(AM_EPG_Monitor_t *mon)
 	mon->eit61ctl.data_arrive_time = 0;
 }
 
+#ifndef DISABLE_ATSC
 static void am_epg_psip_eit_stop(AM_EPG_Monitor_t *mon)
 {
 	int i;
@@ -3431,7 +3443,7 @@ static void am_epg_psip_ett_done(AM_EPG_Monitor_t *mon)
 	/* release for updating new tables */
 	RELEASE_TABLE_FROM_LIST(dvbpsi_atsc_ett_t, mon->atsc_etts);
 }
-
+#endif
 
 
 /**\brief table control data init*/
@@ -3464,6 +3476,7 @@ static void am_epg_tablectl_data_init(AM_EPG_Monitor_t *mon)
 							 0xff, "EIT sche other(60)", MAX_EIT_SUBTABLE_CNT, am_epg_eit60_done, EIT60_REPEAT_DISTANCE, am_epg_proc_eit_section);
 	am_epg_tablectl_init(&mon->eit61ctl, AM_EPG_EVT_EIT61_DONE, AM_SI_PID_EIT, AM_SI_TID_EIT_SCHE_OTH + 1,
 							 0xff, "EIT sche other(61)", MAX_EIT_SUBTABLE_CNT, am_epg_eit61_done, EIT61_REPEAT_DISTANCE, am_epg_proc_eit_section);
+#ifndef DISABLE_ATSC
 	am_epg_tablectl_init(&mon->sttctl, AM_EPG_EVT_STT_DONE, AM_SI_ATSC_BASE_PID, AM_SI_TID_PSIP_STT,
 							 0xff, "STT", 1, am_epg_stt_done, 0, am_epg_proc_stt_section);
 	am_epg_tablectl_init(&mon->mgtctl, AM_EPG_EVT_MGT_DONE, AM_SI_ATSC_BASE_PID, AM_SI_TID_PSIP_MGT,
@@ -3486,6 +3499,7 @@ static void am_epg_tablectl_data_init(AM_EPG_Monitor_t *mon)
 		am_epg_tablectl_init(&mon->psip_ettctl[i], AM_EPG_EVT_PSIP_ETT_DONE, 0x1fff, AM_SI_TID_PSIP_ETT,
 							 0xff, name, MAX_EIT_SUBTABLE_CNT, am_epg_psip_ett_done, PSIP_ETT_REPEAT_DISTANCE, am_epg_proc_psip_ett_section);
 	}
+#endif
 }
 
 /**\brief 按照当前模式重新设置监控*/
