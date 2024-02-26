@@ -15,7 +15,6 @@
  * \author Xia Lei Peng <leipeng.xia@amlogic.com>
  * \date 2010-10-15: create the document
  ***************************************************************************/
-
 #define AM_DEBUG_LEVEL 5
 
 #include <stdio.h>

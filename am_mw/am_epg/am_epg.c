@@ -15,7 +15,6 @@
  * \author Xia Lei Peng <leipeng.xia@amlogic.com>
  * \date 2010-11-04: create the document
  ***************************************************************************/
-
 #define AM_DEBUG_LEVEL 5
 //#define TAG_EXT "-epg"
 
@@ -281,6 +280,7 @@ static void am_epg_wait_events_done(AM_EPG_Monitor_t *mon)
 	}
 }
 
+#ifndef DISABLE_LOCAL_DB
 /**\brief 预约一个EPG事件*/
 static AM_ErrorCode_t am_epg_subscribe_event(sqlite3 *hdb, int db_evt_id)
 {
@@ -350,6 +350,7 @@ static AM_ErrorCode_t am_epg_delete_expired_events(sqlite3 *hdb)
 	AM_DEBUG(1, "Delete expired epg events done!");
 	return AM_SUCCESS;
 }
+#endif
 
 /**\brief 释放过滤器，并保证在此之后不会再有无效数据*/
 static void am_epg_free_filter(AM_EPG_Monitor_t *mon,  int *fid)
@@ -545,8 +546,9 @@ static AM_ErrorCode_t am_epg_tablectl_mark_section(AM_EPG_TableCtl_t * mcl, AM_S
 
 static int am_epg_get_current_service_id(AM_EPG_Monitor_t *mon)
 {
-	int row = 1;
 	int service_id = 0xffff;
+#ifndef DISABLE_LOCAL_DB
+	int row = 1;
 	char sql[256];
 	sqlite3 *hdb;
 
@@ -554,9 +556,11 @@ static int am_epg_get_current_service_id(AM_EPG_Monitor_t *mon)
 
 	snprintf(sql, sizeof(sql), "select service_id from srv_table where db_id=%d", mon->mon_service);
 	AM_DB_Select(hdb, sql, &row, "%d", &service_id);
+#endif
 	return service_id;
 }
 
+#ifndef DISABLE_LOCAL_DB
 static int am_epg_get_current_db_ts_id(AM_EPG_Monitor_t *mon)
 {
 	int row = 1;
@@ -570,6 +574,7 @@ static int am_epg_get_current_db_ts_id(AM_EPG_Monitor_t *mon)
 	AM_DB_Select(hdb, sql, &row, "%d", &db_ts_id);
 	return db_ts_id;
 }
+#endif
 
 static void format_audio_strings(AM_SI_AudioInfo_t *ai, char *pids, char *fmts, char *langs)
 {
@@ -602,7 +607,7 @@ static void format_audio_strings(AM_SI_AudioInfo_t *ai, char *pids, char *fmts, 
 	}
 }
 
-
+#ifndef DISABLE_LOCAL_DB
 static AM_Bool_t am_epg_check_program_av(sqlite3 * hdb, int db_srv_id, int vid, int vfmt, AM_SI_AudioInfo_t *aud_info)
 {
 	int row = 1;
@@ -698,6 +703,7 @@ static AM_Bool_t am_epg_check_program_av(sqlite3 * hdb, int db_srv_id, int vid, 
 	
 	return ret;
 }
+#endif
 
 static void am_epg_proc_tot_section(AM_EPG_Monitor_t *mon, void *tot_section)
 {
@@ -1382,6 +1388,7 @@ static void am_epg_eit_free_event_list(int event_count, AM_EPG_Event_t *pevents)
 
 static void am_epg_proc_eit_section_def(AM_EPG_Monitor_t *mon, void *eit_section)
 {
+#ifndef DISABLE_LOCAL_DB
 	dvbpsi_eit_t *eit = (dvbpsi_eit_t*)eit_section;
 	dvbpsi_eit_event_t *event;
 	dvbpsi_descriptor_t *descr;
@@ -1480,10 +1487,12 @@ static void am_epg_proc_eit_section_def(AM_EPG_Monitor_t *mon, void *eit_section
 	}
 
 	am_epg_eit_free_event_list(evt_cnt, pevt_array);
+#endif
 }
 
 static void am_epg_proc_rrt_section_def(AM_EPG_Monitor_t *mon, void *rrt_section)
 {
+#ifndef DISABLE_LOCAL_DB
 	rrt_section_info_t *rrt = (rrt_section_info_t *)rrt_section;
 	rrt_dimensions_info_t *dimension;
 	rrt_rating_value_t *value;
@@ -1575,11 +1584,12 @@ static void am_epg_proc_rrt_section_def(AM_EPG_Monitor_t *mon, void *rrt_section
 		STEP_STMT(stmt, new_dimension_sql_name, new_dimension_sql);
 		j++;
 	AM_SI_LIST_END()
-
+#endif
 }
 
 static void am_epg_proc_psip_eit_section_def(AM_EPG_Monitor_t *mon, void *eit_section)
 {
+#ifndef DISABLE_LOCAL_DB
 	dvbpsi_atsc_eit_t *eit = (dvbpsi_atsc_eit_t*)eit_section;
 	dvbpsi_atsc_eit_event_t *event;
 	char sql[256];
@@ -1743,10 +1753,12 @@ static void am_epg_proc_psip_eit_section_def(AM_EPG_Monitor_t *mon, void *eit_se
 
 	free(name);
 	name = NULL;
+#endif
 }
 
 static void am_epg_proc_psip_ett_section_def(AM_EPG_Monitor_t *mon, void *ett_section)
 {
+#ifndef DISABLE_LOCAL_DB
 	dvbpsi_atsc_ett_t *ett = (dvbpsi_atsc_ett_t*)ett_section;
 	char sql[256];	 
 	int row = 1,evt_dbid; 
@@ -1800,10 +1812,12 @@ static void am_epg_proc_psip_ett_section_def(AM_EPG_Monitor_t *mon, void *ett_se
 			AM_DEBUG(1,"%s no this event",__FUNCTION__);
 	}
 	free(text);
+#endif
 }
 
 static void am_epg_proc_vct_section_def(AM_EPG_Monitor_t *mon, void *vct_section)
 {
+#ifndef DISABLE_LOCAL_DB
 	dvbpsi_atsc_vct_t *p_vct = (dvbpsi_atsc_vct_t *)vct_section;
 	dvbpsi_atsc_vct_channel_t *vcinfo;
 	AM_SI_AudioInfo_t aud_info;
@@ -1903,6 +1917,7 @@ static void am_epg_proc_vct_section_def(AM_EPG_Monitor_t *mon, void *vct_section
 			continue;
 		}
 	AM_SI_LIST_END()
+#endif
 }
 
 /**\brief 根据过滤器号取得相应控制数据*/
@@ -2386,6 +2401,7 @@ static int insert_net(sqlite3 * hdb, int src, int orig_net_id)
 
 static void am_epg_check_pmt_update_def(AM_EPG_Monitor_t *mon)
 {
+#ifndef DISABLE_LOCAL_DB
 	dvbpsi_pmt_t *pmt;
 	dvbpsi_pmt_es_t *es;
 	dvbpsi_descriptor_t *descr;
@@ -2487,8 +2503,10 @@ static void am_epg_check_pmt_update_def(AM_EPG_Monitor_t *mon)
 		/*触发通知事件*/
 		SIGNAL_EVENT(AM_EPG_EVT_UPDATE_PROGRAM_AV, (void*)(long)mon->mon_service);
 	}
+#endif
 }
 
+#ifndef DISABLE_LOCAL_DB
 static int am_epg_check_sdt_update_stage_version(AM_EPG_Monitor_t *mon)
 {
 	char tmpsql[256];
@@ -2539,9 +2557,11 @@ static int am_epg_check_sdt_update_stage_version(AM_EPG_Monitor_t *mon)
 
 	return -1;
 }
+#endif
 
 static void am_epg_check_sdt_update_def(AM_EPG_Monitor_t *mon)
 {
+#ifndef DISABLE_LOCAL_DB
 	const char *sql = "select db_id,name from srv_table where db_ts_id=? \
 								and service_id=? limit 1";
 	const char *update_sql = "update srv_table set name=? where db_id=?";
@@ -2719,6 +2739,7 @@ update_end:
 		if (update_stmt != NULL)
 			sqlite3_finalize(update_stmt);
 	}
+#endif
 }
 
 static void am_epg_check_pmt_update(AM_EPG_Monitor_t *mon)
@@ -3038,10 +3059,12 @@ static void am_epg_eit50_done(AM_EPG_Monitor_t *mon)
 	mon->eit50ctl.data_arrive_time = 0;
 
 	if (!mon->evt_cb) {
+#ifndef DISABLE_LOCAL_DB
 		sqlite3 *hdb;
 		AM_DB_HANDLE_PREPARE(hdb);
 		/*Delete the expired events*/
 		am_epg_delete_expired_events(hdb);
+#endif
 	}
 }
 
@@ -3065,10 +3088,12 @@ static void am_epg_eit60_done(AM_EPG_Monitor_t *mon)
 	mon->eit60ctl.data_arrive_time = 0;
 
 	if (!mon->evt_cb) {
+#ifndef DISABLE_LOCAL_DB
 		sqlite3 *hdb;
 		AM_DB_HANDLE_PREPARE(hdb);
 		/*Delete the expired events*/
 		am_epg_delete_expired_events(hdb);
+#endif
 	}
 }
 
@@ -3814,12 +3839,14 @@ handle_events:
 			if (evt_flag & AM_EPG_EVT_SET_MON_SRV)
 			{
 				if (mon->mon_service != -1) {
+#ifndef DISABLE_LOCAL_DB
 					int db_ts_id = am_epg_get_current_db_ts_id(mon);
 					if (mon->curr_ts != db_ts_id)
 					{
 						AM_DEBUG(1, "TS changed, %d -> %d", mon->curr_ts, db_ts_id);
 						mon->curr_ts = db_ts_id;
 					}
+#endif
 				}
 			}
 
@@ -4280,8 +4307,9 @@ AM_ErrorCode_t AM_EPG_GetUserData(AM_EPG_Handle_t handle, void **user_data)
  */
 AM_ErrorCode_t AM_EPG_SubscribeEvent(AM_EPG_Handle_t handle, int db_evt_id)
 {
-	AM_EPG_Monitor_t *mon = (AM_EPG_Monitor_t*)handle;
 	AM_ErrorCode_t ret = AM_SUCCESS;
+#ifndef DISABLE_LOCAL_DB
+	AM_EPG_Monitor_t *mon = (AM_EPG_Monitor_t*)handle;
 
 #ifdef ANDROID
 	assert(mon && mon->hdb);
@@ -4300,6 +4328,9 @@ AM_ErrorCode_t AM_EPG_SubscribeEvent(AM_EPG_Handle_t handle, int db_evt_id)
 	}
 	pthread_mutex_unlock(&mon->lock);
 
+#else
+	AM_DEBUG(1, "!!!! Not implemented !!!!, found DISABLE_LOCAL_DB");
+#endif
 	return ret;
 }
 
@@ -4312,8 +4343,9 @@ AM_ErrorCode_t AM_EPG_SubscribeEvent(AM_EPG_Handle_t handle, int db_evt_id)
  */
 AM_ErrorCode_t AM_EPG_UnsubscribeEvent(AM_EPG_Handle_t handle, int db_evt_id)
 {
-	AM_EPG_Monitor_t *mon = (AM_EPG_Monitor_t*)handle;
 	AM_ErrorCode_t ret = AM_SUCCESS;
+#ifndef DISABLE_LOCAL_DB
+	AM_EPG_Monitor_t *mon = (AM_EPG_Monitor_t*)handle;
 
 #ifdef ANDROID
 	assert(mon && mon->hdb);
@@ -4325,6 +4357,9 @@ AM_ErrorCode_t AM_EPG_UnsubscribeEvent(AM_EPG_Handle_t handle, int db_evt_id)
 	ret = am_epg_unsubscribe_event(hdb, db_evt_id);
 	pthread_mutex_unlock(&mon->lock);
 
+#else
+	AM_DEBUG(1, "!!!! Not implemented !!!!, found DISABLE_LOCAL_DB");
+#endif
 	return ret;
 }
 

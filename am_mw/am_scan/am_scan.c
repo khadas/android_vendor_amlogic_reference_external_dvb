@@ -15,7 +15,6 @@
  * \author Xia Lei Peng <leipeng.xia@amlogic.com>
  * \date 2010-10-27: create the document
  ***************************************************************************/
-
 #define AM_DEBUG_LEVEL 2
 
 #include <stdlib.h>
@@ -233,6 +232,7 @@ static int dvbc_std_freqs[] =
 874000
 };
 
+#ifndef DISABLE_LOCAL_DB
 /*SQLite3 stmts*/
 const char *sql_stmts[MAX_STMT] =
 {
@@ -295,6 +295,7 @@ const char *sql_stmts[MAX_STMT] =
 /*SELECT_DBTSID_BY_NUM_AND_SRC,*/	     "select db_ts_id,db_id from srv_table where src = ? and chan_order = ?",
 /*UPDATE_TS_FREQ,*/	                     "update ts_table set db_net_id=?,ts_id=?,symb=?,mod=?,bw=?,snr=?,ber=?,strength=?,std=?,aud_mode=?,dvbt_flag=?,flags=0,freq=? where db_id=?",
 };
+#endif
 
 /****************************************************************************
  * static functions
@@ -402,7 +403,7 @@ static int am_scan_format_atv_freq(int tmp_freq)
 
 
 
-
+#ifndef DISABLE_LOCAL_DB
 /**\brief 插入一个网络记录，返回其索引*/
 static int insert_net(sqlite3_stmt **stmts, int src, int orig_net_id)
 {
@@ -549,6 +550,7 @@ static int insert_srv(sqlite3_stmt **stmts, int db_net_id, int db_ts_id, int plp
 
 	return db_id;
 }
+#endif
 
 /**\brief 将audio数据格式化成字符串已便存入数据库*/
 static void format_audio_strings(AM_SI_AudioInfo_t *ai, char *pids, char *fmts, char *langs,char *audio_type,char *audio_exten)
@@ -670,6 +672,7 @@ static void format_teletext_strings(AM_SI_TeletextInfo_t *ti, char *pids, char *
 	}
 }
 
+#ifndef DISABLE_LOCAL_DB
 /**\brief 查询一个satellite parameter记录是否已经存在 */
 static int get_sat_para_record(sqlite3_stmt **stmts, AM_SCAN_DTVSatellitePara_t *sat_para)
 {
@@ -862,6 +865,7 @@ static int am_scan_get_ts_network(sqlite3_stmt **stmts, int src, dvbpsi_nit_t *n
 
 	return net_dbid;
 }
+#endif
 
 static dvbpsi_pat_t *get_valid_pats(AM_SCAN_TS_t *ts)
 {
@@ -989,6 +993,8 @@ static int am_scan_check_skip(AM_SCAN_ServiceInfo_t *srv_info, int mode)
 	ret = 0;
 	return ret;
 }
+
+#ifndef DISABLE_LOCAL_DB
 /***\brief 更新一个TS数据*/
 static void am_scan_update_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, int net_dbid, int dbid, AM_SCAN_TS_t *ts)
 {
@@ -1089,6 +1095,7 @@ static void am_scan_update_ts_info(sqlite3_stmt **stmts, AM_SCAN_Result_t *resul
 	sqlite3_step(stmts[DELETE_TS_EVTS]);
 	sqlite3_reset(stmts[DELETE_TS_EVTS]);
 }
+#endif
 
 /**\brief 初始化一个service结构*/
 static void am_scan_init_service_info(AM_SCAN_ServiceInfo_t *srv_info)
@@ -1193,6 +1200,7 @@ static void am_scan_update_service_info(sqlite3_stmt **stmts, AM_SCAN_Result_t *
 		return;
 	}
 
+#ifndef DISABLE_LOCAL_DB
 	/* Update to database */
 	AM_DEBUG(1, "Updating Program: '%s', db_srv_id(%d), srv_type(%d)",
 		srv_info->name, srv_info->srv_dbid, srv_info->srv_type);
@@ -1250,6 +1258,7 @@ static void am_scan_update_service_info(sqlite3_stmt **stmts, AM_SCAN_Result_t *
 	sqlite3_bind_int(stmts[UPDATE_SRV], 42, srv_info->srv_dbid);
 	sqlite3_step(stmts[UPDATE_SRV]);
 	sqlite3_reset(stmts[UPDATE_SRV]);
+#endif
 }
 
 /**\brief 提取CA加扰标识*/
@@ -1488,6 +1497,8 @@ static int get_pmt_pid(dvbpsi_pat_t *pats, int program_number)
 
 	return 0x1fff;
 }
+
+#ifndef DISABLE_LOCAL_DB
 /** Update Analog TS to database */
 static void update_analog_ts_bynum(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN_TS_t *ts, int atv_update_num)
 {
@@ -1540,6 +1551,7 @@ static void update_analog_ts_bynum(sqlite3_stmt **stmts, AM_SCAN_Result_t *resul
 
 	}
 }
+#endif
 
 /**\brief Store a Analog TS to database */
 static void store_analog_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN_TS_t *ts)
@@ -1554,6 +1566,7 @@ static void store_analog_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_S
 
 	if (store)
 	{
+#ifndef DISABLE_LOCAL_DB
 		AM_DEBUG(1, "@@ Storing a analog ts @@");
 
 		dbid = -1;
@@ -1613,6 +1626,7 @@ static void store_analog_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_S
 
 		/* 更新TS数据 */
 		am_scan_update_ts_info(stmts, result, -1, dbid, ts);
+#endif
 	}
 
 	/* 存储ATV频道 */
@@ -1622,6 +1636,7 @@ static void store_analog_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_S
 
 	if (store)
 	{
+#ifndef DISABLE_LOCAL_DB
 		/*添加新业务到数据库*/
 		srv_info.srv_dbid = insert_srv(stmts, -1, dbid, srv_info.plp_id, 0xffff);
 		if (srv_info.srv_dbid == -1)
@@ -1629,6 +1644,7 @@ static void store_analog_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_S
 			AM_DEBUG(1, "insert new srv error");
 			return;
 		}
+#endif
 	}
 	srv_info.vfmt = -1;
 	memset(lang_tmp, 0, sizeof(lang_tmp));
@@ -1676,6 +1692,7 @@ static void store_atsc_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCA
 
 	if (store)
 	{
+#ifndef DISABLE_LOCAL_DB
 		AM_DB_HANDLE_PREPARE(hdb);
 
 		/*没有PAT或VCT，不存储*/
@@ -1699,6 +1716,7 @@ static void store_atsc_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCA
 
 		/* 更新TS数据 */
 		am_scan_update_ts_info(stmts, result, net_dbid, dbid, ts);
+#endif
 	}
 
 	/*遍历PMT表*/
@@ -1713,6 +1731,7 @@ static void store_atsc_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCA
 
 		if (store)
 		{
+#ifndef DISABLE_LOCAL_DB
 			/*添加新业务到数据库*/
 			srv_info.srv_dbid = insert_srv(stmts, net_dbid, dbid, srv_info.plp_id, srv_info.srv_id);
 			if (srv_info.srv_dbid == -1)
@@ -1720,6 +1739,7 @@ static void store_atsc_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCA
 				AM_DEBUG(1, "insert new srv error");
 				continue;
 			}
+#endif
 		}
 
 
@@ -1805,12 +1825,14 @@ VCT_END:
 
 		if (store)
 		{
+#ifndef DISABLE_LOCAL_DB
 			srv_info.srv_dbid = insert_srv(stmts, net_dbid, dbid, srv_info.plp_id, srv_info.srv_id);
 			if (srv_info.srv_dbid == -1)
 			{
 				AM_DEBUG(1, "insert new srv error");
 				continue;
 			}
+#endif
 		}
 		if (vcinfo->i_channel_tsid == vct->i_extension)
 		{
@@ -1848,6 +1870,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 
 	if (store)
 	{
+#ifndef DISABLE_LOCAL_DB
 		AM_DB_HANDLE_PREPARE(hdb);
 
 		/*没有PAT，不存储*/
@@ -1887,6 +1910,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 
 		/* 更新TS数据 */
 		am_scan_update_ts_info(stmts, result, net_dbid, dbid, ts);
+#endif
 	}
 
 	/*存储DTV节目，遍历PMT表*/
@@ -1920,6 +1944,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 
 				if (store)
 				{
+#ifndef DISABLE_LOCAL_DB
 					/*添加新业务到数据库*/
 					srv_info.srv_dbid = insert_srv(stmts, net_dbid, dbid, srv_info.plp_id, srv_info.srv_id);
 					if (srv_info.srv_dbid == -1)
@@ -1929,6 +1954,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 					}
 
 					am_scan_rec_tab_add_srv(tab, srv_info.srv_dbid, ts);
+#endif
 				}
 
 				/* looking for CA descr */
@@ -1944,9 +1970,11 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 
 					if (store)
 					{
+#ifndef DISABLE_LOCAL_DB
 						/* 提取subtitle & teletext */
 						AM_SI_ExtractDVBSubtitleFromES(es, &srv_info.sub_info);
 						AM_SI_ExtractDVBTeletextFromES(es, &srv_info.ttx_info);
+#endif
 					}
 
 					/* 查找CA加扰标识 */
@@ -1987,6 +2015,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 
 				if (store)
 				{
+#ifndef DISABLE_LOCAL_DB
 					srv_info.srv_dbid = insert_srv(stmts, net_dbid, dbid, srv_info.plp_id, srv_info.srv_id);
 					if (srv_info.srv_dbid == -1)
 					{
@@ -1995,6 +2024,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 					}
 
 					am_scan_rec_tab_add_srv(tab, srv_info.srv_dbid, ts);
+#endif
 				}
 
 				am_scan_extract_srv_info_from_sdt(result, sdt_list, &srv_info);
@@ -2013,6 +2043,7 @@ static void store_dvb_ts(sqlite3_stmt **stmts, AM_SCAN_Result_t *result, AM_SCAN
 /**\brief 清除数据库中某个源的所有数据*/
 static void am_scan_clear_source(sqlite3 *hdb, int src)
 {
+#ifndef DISABLE_LOCAL_DB
 	char sqlstr[128];
 
 	/*删除network记录*/
@@ -2033,6 +2064,7 @@ static void am_scan_clear_source(sqlite3 *hdb, int src)
 	/*清空event记录*/
 	snprintf(sqlstr, sizeof(sqlstr), "delete from evt_table where src=%d",src);
 	sqlite3_exec(hdb, sqlstr, NULL, NULL, NULL);
+#endif
 }
 
 static void am_scan_clear_satellite(sqlite3 *hdb, int db_sat_id)
@@ -2818,6 +2850,7 @@ static void am_scan_dvbs_default_sort_by_hd_sd(AM_SCAN_Result_t *result, sqlite3
 
 static void am_scan_atv_store(AM_SCAN_Result_t *result)
 {
+#ifndef DISABLE_LOCAL_DB
 	AM_SCAN_TS_t *ts;
 	char sqlstr[128];
 	sqlite3_stmt	*stmts[MAX_STMT];
@@ -2871,10 +2904,16 @@ store_end:
 	}
 
 	am_scan_rec_tab_release(&srv_tab);
+
+#else
+	AM_DEBUG(1, "!!! No Default Store Proc for ATV !!!, found DISABLE_LOCAL_DB");
+#endif
 }
+
 /**\brief 默认搜索完毕存储函数*/
 static void am_scan_default_store(AM_SCAN_Result_t *result)
 {
+#ifndef DISABLE_LOCAL_DB
 	AM_SCAN_TS_t *ts;
 	char sqlstr[128];
 	sqlite3_stmt	*stmts[MAX_STMT];
@@ -3019,6 +3058,9 @@ store_end:
 	}
 
 	am_scan_rec_tab_release(&srv_tab);
+#else
+	AM_DEBUG(1, "!!! No Default Store Proc !!!, found DISABLE_LOCAL_DB");
+#endif
 }
 
 /**\brief 清空一个表控制标志*/
@@ -5703,11 +5745,13 @@ handle_events:
 		(GET_MODE(dtv_start_para.mode) != AM_SCAN_DTVMODE_MANUAL &&
 		GET_MODE(dtv_start_para.mode) != AM_SCAN_DTVMODE_NONE))
 	{
+#ifndef DISABLE_LOCAL_DB
 		sqlite3 *hdb;
 
 		AM_DB_HANDLE_PREPARE(hdb);
 		AM_DEBUG(1, "Clear DTV source %d ...", dtv_start_para.source);
 		am_scan_clear_source(hdb, dtv_start_para.source);
+#endif
 	}
 
 	//check if user pause

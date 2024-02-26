@@ -10,107 +10,27 @@ license {
     ],
 }
 
-// TODO:
-cc_library_static {
-    vendor: true,
-    //vendor_available: true,
-    name: "libam_mw_static",
-    compile_multilib: "both",
-
-    arch: {
-	arm: {
-	    instruction_set: "arm",
-	},
-	 arm64: {
-	    enabled: true,
-	},
-	x86: {
-	    enabled: false,
-	},
-	x86_64: {
-	    enabled: false,
-	},
-    },
+bootstrap_go_package {
+    name: "soong-am_mw",
+    pkgPath: "android/soong/am_mw",
+    deps: [
+    "blueprint",
+    "blueprint-pathtools",
+    "soong",
+    "soong-android",
+    "soong-cc",
+    "soong-genrule",
+    ],
     srcs: [
-         "am_db/am_db.c",
-         "am_epg/am_epg.c",
-         "am_rec/am_rec.c",
-         "am_scan/am_scan.c",
-         "am_sub2/am_sub.c",
-         "am_sub2/dvb_sub.c",
-         "am_tt2/am_tt.c",
-         "am_si/am_si.c",
-         "am_si/atsc/atsc_rrt.c",
-         "am_si/atsc/atsc_vct.c",
-         "am_si/atsc/atsc_mgt.c",
-         "am_si/atsc/atsc_stt.c",
-         "am_si/atsc/atsc_eit.c",
-         "am_si/atsc/atsc_ett.c",
-         "am_si/atsc/atsc_descriptor.c",
-         "am_si/atsc/huffman_decode.c",
-         "am_fend_ctrl/am_sec.c",
-         "am_fend_ctrl/am_fend_ctrl.c",
-         "am_caman/am_caman.c",
-         "am_caman/ca_dummy.c",
-         "am_cc/am_cc.c",
-         "am_cc/cc_json.c",
-         "am_isdb/am_isdb.c",
-         "am_upd/am_upd.c",
-         "am_closecaption/am_cc.c",
-         "am_closecaption/am_cc_decoder.c",
-         "am_closecaption/am_xds.c",
-         "am_closecaption/am_cc_slice.c",
-         "am_closecaption/am_vbi/linux_vbi/linux_vbi.c",
-         "am_closecaption/am_vbi/am_vbi_api.c",
-         "am_check_scramb/am_check_scramb.c",
-         "am_scte27/am_scte27.c",
+        "am_mw.go",
     ],
-
-    cflags: [
-        "-DANDROID",
-        "-std=gnu99",
-        "-DLINUX_DVB_FEND",
-        "-DLOG_LEVEL=1",
-        "-DUSE_VENDOR_ICU",
-        "-Wno-error=tautological-pointer-compare"
-    ],
-    ldflags: ["-shared"],
-
-    // TODO: include library
-    include_dirs: [
-        "hardware/amlogic/LibAudio/amadec/include",
-        "vendor/amlogic/common/mediahal_sdk/include",
-        "vendor/amlogic/common/prebuilt/icu/include",
-        "external/sqlite/dist/",
-    ],
-
-    local_include_dirs: [
-        "am_closecaption/am_vbi/",
-    ],
-
-    header_libs: ["libam_dvb_headers"],
-
-    shared_libs: [
-       "libam_adp",
-       //"libsqlite",
-       "libzvbi",
-       "libicuuc_vendor",
-       "libcutils",
-       "liblog",
-       "libdl",
-       "libc",
-    ],
-     static_libs: [
-       //"libicui18n_product",
-       "libsqlite",
-    ],
+    pluginFor: ["soong_build"],
 }
 
-cc_library_shared {
-    name: "libam_mw",
-    vendor: true,
-    compile_multilib: "both",
 
+cc_defaults {
+    name: "am_mw_common_defaults",
+    compile_multilib: "both",
     arch: {
         arm: {
             instruction_set: "arm",
@@ -126,32 +46,168 @@ cc_library_shared {
         },
     },
 
+    cflags: [
+        "-DANDROID",
+        "-std=gnu99",
+        "-DLINUX_DVB_FEND",
+        "-DLOG_LEVEL=1",
+        "-DUSE_VENDOR_ICU",
+        "-Wno-error=tautological-pointer-compare",
+    ],
+
+    ldflags: ["-shared"],
+
+    include_dirs: [
+        "hardware/amlogic/LibAudio/amadec/include",
+        "vendor/amlogic/common/mediahal_sdk/include",
+        "vendor/amlogic/common/prebuilt/icu/include",
+        "external/sqlite/dist/",
+    ],
+
+    local_include_dirs: [
+        "am_closecaption/am_vbi/",
+    ],
+
+    header_libs: ["libam_dvb_headers"],
+
     shared_libs: [
        "libam_adp",
-       "libzvbi",
        "libicuuc_vendor",
        "libcutils",
        "liblog",
        "libdl",
        "libc",
     ],
-    cflags: [
-        "-DANDROID",
-        "-std=gnu99",
-        "-DLINUX_DVB_FEND",
-        "-DLOG_LEVEL=1",
-        "-DUSE_VENDOR_ICU"
-    ],
-    ldflags: ["-shared"],
-
-    whole_static_libs: [
-       "libam_mw_static",
-    ],
 
     static_libs: [
-       //"libicui18n_product",
-       "libsqlite",
     ],
-
 }
 
+/*also used in go file, check carefully before change*/
+db_srcs = [
+        "am_db/am_db.c",
+        ]
+
+cc_defaults {
+    name: "am_mw_db_defaults",
+    srcs: db_srcs,
+    //static_libs: ["libsqlite",]
+}
+
+/*also used in go file, check carefully before change*/
+subtitle_srcs = [
+        "am_sub2/am_sub.c",
+        "am_sub2/dvb_sub.c",
+        "am_tt2/am_tt.c",
+        "am_cc/am_cc.c",
+        "am_cc/cc_json.c",
+        "am_closecaption/am_cc.c",
+        "am_closecaption/am_cc_decoder.c",
+        "am_closecaption/am_xds.c",
+        "am_closecaption/am_cc_slice.c",
+        "am_closecaption/am_vbi/linux_vbi/linux_vbi.c",
+        "am_closecaption/am_vbi/am_vbi_api.c",
+        ]
+
+cc_defaults {
+    name: "am_mw_subtitle_defaults",
+    srcs: subtitle_srcs,
+    //shared_libs: ["libzvbi",]
+}
+
+/*also used in go file, check carefully before change*/
+misc_srcs = [
+        "am_caman/am_caman.c",
+        "am_caman/ca_dummy.c",
+        "am_upd/am_upd.c",
+    ]
+
+cc_defaults {
+    name: "am_mw_misc_defaults",
+    srcs: misc_srcs,
+}
+
+cc_defaults {
+    name: "am_mw_dtv_defaults",
+    srcs: [
+        "am_epg/am_epg.c",
+        "am_rec/am_rec.c",
+        "am_scan/am_scan.c",
+        "am_si/am_si.c",
+        "am_si/atsc/atsc_rrt.c",
+        "am_si/atsc/atsc_vct.c",
+        "am_si/atsc/atsc_mgt.c",
+        "am_si/atsc/atsc_stt.c",
+        "am_si/atsc/atsc_eit.c",
+        "am_si/atsc/atsc_ett.c",
+        "am_si/atsc/atsc_descriptor.c",
+        "am_si/atsc/huffman_decode.c",
+        "am_fend_ctrl/am_sec.c",
+        "am_fend_ctrl/am_fend_ctrl.c",
+        "am_isdb/am_isdb.c",
+        "am_check_scramb/am_check_scramb.c",
+        "am_scte27/am_scte27.c",
+    ],
+}
+
+//filled by am_mw.go
+am_mw_lib_defaults {
+    name: "am_mw_lib_defaults",
+}
+am_mw_defaults {
+    name: "am_mw_defaults",
+}
+
+cc_library_static {
+    name: "libam_mw_static",
+    defaults: [
+        "am_mw_common_defaults",
+        "am_mw_dtv_defaults",
+        "am_mw_db_defaults",
+        "am_mw_subtitle_defaults",
+        "am_mw_misc_defaults",
+        "am_mw_defaults",
+        "am_mw_lib_defaults",
+    ],
+    vendor: true,
+}
+
+cc_library_shared {
+    name: "libam_mw",
+    defaults: ["am_mw_common_defaults", "am_mw_lib_defaults"],
+    vendor: true,
+
+    shared_libs: [
+    ],
+
+    whole_static_libs: [
+        "libam_mw_static",
+    ],
+}
+
+cc_library_static {
+    name: "libam_mw_thin_static",
+    defaults: [
+        "am_mw_common_defaults",
+        "am_mw_dtv_defaults",
+    ],
+    cflags: [
+        "-DDISABLE_LOCAL_DB",
+        "-DDISABLE_SUBTITLE",
+        "-DDISABLE_MISC",
+    ],
+    vendor: true,
+}
+
+cc_library_shared {
+    name: "libam_mw_thin",
+    defaults: ["am_mw_common_defaults",],
+    vendor: true,
+
+    shared_libs: [
+    ],
+
+    whole_static_libs: [
+        "libam_mw_thin_static",
+    ],
+}
